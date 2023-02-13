@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entertainmentcareers.net.Server", "Entertainmentcareers.net\Server\Entertainmentcareers.net.Server.csproj", "{8A9D71A5-EDC4-4A13-AFCA-AE170644A9A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entertainmentcareers.net.Server", "Entertainmentcareers.net\Server\Entertainmentcareers.net.Server.csproj", "{8A9D71A5-EDC4-4A13-AFCA-AE170644A9A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entertainmentcareers.net.Client", "Entertainmentcareers.net\Client\Entertainmentcareers.net.Client.csproj", "{B1693B0A-8568-43AF-A0BC-28C350C515E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entertainmentcareers.net.Client", "Entertainmentcareers.net\Client\Entertainmentcareers.net.Client.csproj", "{B1693B0A-8568-43AF-A0BC-28C350C515E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entertainmentcareers.net.Shared", "Entertainmentcareers.net\Shared\Entertainmentcareers.net.Shared.csproj", "{C8F90085-5D0A-4366-9232-8A7A49D62716}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entertainmentcareers.net.Shared", "Entertainmentcareers.net\Shared\Entertainmentcareers.net.Shared.csproj", "{C8F90085-5D0A-4366-9232-8A7A49D62716}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
