@@ -6,7 +6,7 @@
 
 <MudLayout>
     <MudAppBar Style="background-color: #0E5FAC;">
-        <MudSpacer/>
+        <MudSpacer />
         <MudMenu ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.BottomCenter" Dense="true">
             <ActivatorContent>
                 <MudButton EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Variant="Variant.Text" Style="text-transform:none;" Class="text-white mr-2">Resources</MudButton>
@@ -39,7 +39,7 @@
                     <MudItem xs="1"></MudItem>
                     <MudItem xs="5">
                         <MudText Typo="Typo.subtitle2" Class="ml-4"><b>FOR EMPLOYERS</b></MudText>
-                        <MudMenuItem>General</MudMenuItem>        
+                        <MudMenuItem>General</MudMenuItem>
                         <MudMenuItem>Q&A</MudMenuItem>
                         <MudMenuItem>Resources</MudMenuItem>
                         <MudMenuItem>Resume Delivery</MudMenuItem>
@@ -52,7 +52,7 @@
         </MudMenu>
         <MudButton Variant="Variant.Text" Style="text-transform:none;" Class="text-white mr-2">About</MudButton>
         <MudButton Variant="Variant.Text" Style="text-transform:none;" Class="text-white mr-8">Contact Us</MudButton>
-        <MudButton Href="" Size="Size.Large" Style="background-color: #084A88;" Class="text-white" StartIcon="@Icons.Material.Filled.Login" Variant="Variant.Filled" >SIGN IN</MudButton>
+        <MudButton Href="" Size="Size.Large" Style="background-color: #084A88;" Class="text-white" StartIcon="@Icons.Material.Filled.Login" Variant="Variant.Filled">SIGN IN</MudButton>
     </MudAppBar>
     <MudMainContent>
         <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="pt-3">
@@ -61,18 +61,18 @@
                     <a href="/"><MudImage Src="Images/Group 53.png" Fluid="true" /></a>
                 </MudItem>
                 <MudItem xs="7" Class="text-center">
-                <MudButton Size="Size.Large" Variant="Variant.Text" Class="text-white mr-2">Jobs</MudButton>
-                <MudButton Size="Size.Large" Variant="Variant.Text" Class="text-white mr-2">Internships</MudButton>
-                <MudButton Size="Size.Large" Variant="Variant.Text" Class="text-white mr-2">Companies</MudButton>
+                    <MudButton Size="Size.Large" Variant="Variant.Text" Class="text-white mr-2">Jobs</MudButton>
+                    <MudButton Size="Size.Large" Variant="Variant.Text" Class="text-white mr-2">Internships</MudButton>
+                    <MudButton Size="Size.Large" Variant="Variant.Text" Class="text-white mr-2">Companies</MudButton>
                     <MudMenu FullWidth="true" ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.BottomCenter" Dense="true">
                         <ActivatorContent>
                             <MudButton Size="Size.Large" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Variant="Variant.Text" Class="text-white mr-2">JOB SEEKERS </MudButton>
                         </ActivatorContent>
                         <ChildContent>
-                                    <MudMenuItem>My Jobs</MudMenuItem>
-                                    <MudMenuItem>Resources</MudMenuItem>
-                                    <MudMenuItem>Job Alert</MudMenuItem>
-                                    <MudMenuItem>Support</MudMenuItem>
+                            <MudMenuItem>My Jobs</MudMenuItem>
+                            <MudMenuItem>Resources</MudMenuItem>
+                            <MudMenuItem>Job Alert</MudMenuItem>
+                            <MudMenuItem>Support</MudMenuItem>
                         </ChildContent>
                     </MudMenu>
                     <MudMenu FullWidth="true" ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.BottomCenter" Dense="true">
@@ -80,17 +80,30 @@
                             <MudButton Size="Size.Large" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Variant="Variant.Text" Class="text-white">EMPLOYERS</MudButton>
                         </ActivatorContent>
                         <ChildContent>
-                                    <MudMenuItem>Post a Job</MudMenuItem>
-                                    <MudMenuItem>My Postings</MudMenuItem>
-                                    <MudMenuItem>Support</MudMenuItem>
-                                    <MudMenuItem>Employer FAQ</MudMenuItem>
+                            <MudMenuItem>Post a Job</MudMenuItem>
+                            <MudMenuItem>My Postings</MudMenuItem>
+                            <MudMenuItem>Support</MudMenuItem>
+                            <MudMenuItem>Employer FAQ</MudMenuItem>
                         </ChildContent>
                     </MudMenu>
                 </MudItem>
                 <MudItem xs="3" Class="text-center">
-                <MudTextField @bind-Value="Search" Style="background-color: #FFFFFF; max-width:300px" Margin="Margin.Dense" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" Placeholder="Search for any job or keyword" AdornmentColor="Color.Default" />
+                    <MudTextField @bind-Value="Search" Style="background-color: #FFFFFF; max-width:300px" Margin="Margin.Dense" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" Placeholder="Search for any job or keyword" AdornmentColor="Color.Default" />
                 </MudItem>
             </MudGrid>
+
+            <MudGrid Class="border mt-3" Justify="Justify.Center">
+                <MudItem xs="11">
+                    <MudButton Size="Size.Medium" Variant="Variant.Text" Style="text-transform:none; color:#08243D;">Explore</MudButton>
+                    <MudButton Size="Size.Medium" Variant="Variant.Text" Style="text-transform:none; color:#08243D;" Class="ml-6">My Jobs</MudButton>
+                    <MudButton Size="Size.Medium" Variant="Variant.Text" Style="text-transform:none; color:#08243D;" Class="ml-6">Internships</MudButton>
+                    <MudButton Size="Size.Medium" Variant="Variant.Text" Style="text-transform:none; color:#08243D;" Class="ml-6">Companies</MudButton>
+                    <MudButton Size="Size.Medium" Variant="Variant.Text" Style="text-transform:none; color:#08243D;" Class="ml-6">Resources</MudButton>
+                    <MudButton Size="Size.Medium" Variant="Variant.Text" Style="text-transform:none; color:#08243D;" Class="ml-6">Job Alert</MudButton>
+                    <MudButton Size="Size.Medium" Variant="Variant.Text" Style="text-transform:none; color:#08243D;" Class="ml-6">Support</MudButton>
+                </MudItem>
+            </MudGrid>
+
             @Body
             <MudGrid Style="background-color:#F0F7FB;" Justify="Justify.Center">
                 <MudItem xs="10">
@@ -131,7 +144,7 @@
                         </MudItem>
                     </MudGrid>
                     <MudGrid Justify="Justify.FlexEnd" Class="mt-4">
-                        <MudImage Src="Images/image 4.png" Height="70" Width="140" Href />
+                        <MudImage Src="Images/image 4.png" Height="70" Width="140" />
                     </MudGrid>
                     <MudGrid Class="mt-6">
                         <MudItem xs="6">

@@ -1,0 +1,141 @@
+﻿@layout ProfileLayout
+@page "/profile"
+
+<MudGrid Justify="Justify.Center" Class="mt-8 mb-8">
+    <MudItem xs="10">
+        <MudGrid Justify="Justify.Center" Class="border">
+            <MudItem xs="12">
+                <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="pb-2">Account Overview</MudText>
+                <MudText Typo="Typo.h6" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2">Welcome back to your account, <b>#Name.</b></MudText>
+            </MudItem>
+            <MudItem xs="6">
+                <MudGrid Class="mb-2" Justify="Justify.Center">
+                    <MudItem xs="12">
+                        <MudCard Style="background-color:#EEF5F8">
+                            <MudCardContent>
+                                 <MudGrid>
+                                     <MudItem xs="12">
+                                         <MudText Typo="Typo.h6" Style="font-family: 'Inter'; color:#08243D;" Class="border-bottom"><b>Account Information</b></MudText>
+                                     </MudItem>
+                                     <MudItem xs="2">
+                                         <MudText Typo="Typo.subtitle2" Style="font-family: 'Inter';color:#08243D;"><b>Login ID:</b></MudText>
+                                     </MudItem>
+                                     <MudItem xs="10">
+                                         <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">#Username</MudText>
+                                         <MudChip Class="mt-6"><b>Change Login</b></MudChip>
+                                         <MudChip Class="mt-6"><b>Change Password</b></MudChip>
+                                     </MudItem>
+                                    <MudItem xs="2">
+                                        <MudText Typo="Typo.subtitle2" Style="font-family: 'Inter';color:#08243D;"><b>Name:</b></MudText>
+                                    </MudItem>
+                                    <MudItem xs="10">
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">#Name</MudText>
+                                    </MudItem>
+                                    <MudItem xs="2">
+                                        <MudText Typo="Typo.subtitle2" Style="font-family: 'Inter';color:#08243D;"><b>Address:</b></MudText>
+                                    </MudItem>
+                                    <MudItem xs="10">
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">#Adress<br />#Adress</MudText>
+                                        <MudChip Class="mt-6"><b>Change Personal Information</b></MudChip>
+                                    </MudItem>
+                                 </MudGrid>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudCard Style="background-color:#EEF5F8">
+                            <MudCardContent>
+                                <MudGrid>
+                                     <MudItem xs="12">
+                                         <MudText Typo="Typo.h6" Style="font-family: 'Inter'; color:#08243D;" Class="border-bottom"><b>Billing Information</b></MudText>
+                                     </MudItem>
+                                     <MudItem xs="2">
+                                         <MudText Typo="Typo.subtitle2" Style="font-family: 'Inter';color:#08243D;"><b>Type:</b></MudText>
+                                     </MudItem>
+                                     <MudItem xs="10">
+                                         <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">#Plan Type</MudText>
+                                     </MudItem>
+                                    <MudItem xs="2">
+                                        <MudText Typo="Typo.subtitle2" Style="font-family: 'Inter';color:#08243D;"><b>Expires:</b></MudText>
+                                    </MudItem>
+                                    <MudItem xs="10">
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">#Expires</MudText>
+                                        <MudChip Class="mt-6"><b>Billing Details</b></MudChip>
+                                        <MudChip Style="background-color: #689F38; color: #FFFFFF;" Class="mt-6"><b>Renew</b></MudChip>
+                                        <MudChip Class="mt-6"><b>Cancel</b></MudChip>
+                                    </MudItem>
+                                 </MudGrid>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+            <MudItem xs="6">
+                <MudGrid Justify="Justify.Center">
+                    <MudItem xs="12">
+                        <MudCard Style="background-color:#EEF5F8">
+                            <MudCardContent>
+                                <MudGrid>
+                                    <MudItem xs="12">
+                                        <MudText Typo="Typo.h6" Style="font-family: 'Inter'; color:#08243D;" Class="border-bottom"><b>Resumes</b></MudText>
+                                        <MudChip Class="mt-2"><b>Add Resume</b></MudChip>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudCard Style="background-color:#EEF5F8">
+                            <MudCardContent>
+                                <MudGrid>
+                                    <MudItem xs="12">
+                                        <MudText Typo="Typo.h6" Style="font-family: 'Inter'; color:#08243D;" Class="border-bottom"><b>Cover Letters</b></MudText>
+                                        <MudChip Class="mt-2"><b>Add Cover Letter</b></MudChip>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudCard Style="background-color:#EEF5F8">
+                            <MudCardContent>
+                                <MudGrid>
+                                    <MudItem xs="12">
+                                        <MudText Typo="Typo.h6" Style="font-family: 'Inter'; color:#08243D;" Class="border-bottom"><b>Personalization & Email Alerts</b></MudText>
+                                    </MudItem>
+                                    <MudItem xs="3">
+                                        <MudText Typo="Typo.subtitle2" Style="font-family: 'Inter';color:#08243D;"><b>Email Alert:</b></MudText>
+                                    </MudItem>
+                                    <MudItem xs="9">
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">#Alert</MudText>
+                                    </MudItem>
+                                    <MudItem xs="3">
+                                        <MudText Typo="Typo.subtitle2" Style="font-family: 'Inter';color:#08243D;"><b>Categories:</b></MudText>
+                                    </MudItem>
+                                    <MudItem xs="9">
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">#Category</MudText>
+                                    </MudItem>
+                                    <MudItem xs="3">
+                                        <MudText Typo="Typo.subtitle2" Style="font-family: 'Inter';color:#08243D;"><b>Locations:</b></MudText>
+                                    </MudItem>
+                                    <MudItem xs="9">
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">#Location</MudText>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;">You have not set your email preferences.<br />You can receive a daily or weekly email that will include all jobs that meet your profile.</MudText>
+                                        <br/>
+                                        <MudChip Style="background-color: #689F38; color: #FFFFFF;" Class="mt-2"><b>Set Your Preferences</b></MudChip>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
+
+
+@code {
+}

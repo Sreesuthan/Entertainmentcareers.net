@@ -53,13 +53,13 @@ namespace Entertainmentcareers.net.Server.Controllers
         public async Task<ActionResult<List<Job>>> CreateJob(Job job)
         {
             using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-            await connection.ExecuteAsync("Insert into jobs values(@Email, @EmploymentType, @JobType, @CompanyName, @ShowCompanyName, @JobTitle, @JobCode, @City, @Country, @State, @LastDateToApply, @Salary, @Website, @Details, @Instructions, @AdditionalComments, @InstructionForUs, @CreateDate, @Active, @Employer, @Category)", job);
+            await connection.ExecuteAsync("Insert into Jobs values(@Email, @EmploymentType, @JobType, @CompanyName, @ShowCompanyName, @JobTitle, @JobCode, @City, @Country, @State, @Website, @Details, @Instructions, @Salary, @AdditionalComments, @InstructionForUs, @Active, @Employer, @Category, @CreateDate, @LastDateToApply)", job);
             return Ok(await SelectAllJobs(connection));
         }
 
         private static async Task<IEnumerable<Job>> SelectAllJobs(SqlConnection connection)
         {
-            return await connection.QueryAsync<Job>("select * from jobs");
+            return await connection.QueryAsync<Job>("select * from Jobs");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿@page "/postjob"
+﻿@layout EmployerLayout
+@page "/postjob"
 @using Entertainmentcareers.net.Shared;
 @inject IJobService JobService
 @inject HttpClient Http
@@ -422,7 +423,7 @@
                             <MudButton OnClick="()=>Submit()" Style="background-color: #689F38; color: #FFFFFF;" Variant=" Variant.Filled">Submit</MudButton>
                     </MudItem>
                     <MudItem xs="12">
-                        <MudChip  OnClick="()=>Edit()">Go Back</MudChip>
+                                    <MudChip OnClick="()=>Edit()"><b>Go Back</b></MudChip>
                         </MudItem>
                             </MudItem>
                         </MudGrid>
@@ -512,6 +513,7 @@
             job.Employer = "Sree";
             await JobService.CreateJob(job);
             snackBar.Add("Job/Intership Posted Successfully", Severity.Success);
+            IsPreview = false;
         }
         else
         {

@@ -91,7 +91,22 @@
                 <MudTextField @bind-Value="Search" Style="background-color: #FFFFFF; max-width:300px" Margin="Margin.Dense" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" Placeholder="Search for any job or keyword" AdornmentColor="Color.Default" />
                 </MudItem>
             </MudGrid>
+
+            <MudGrid Class="border mt-3" Justify="Justify.Center">
+                <MudItem xs="9">
+                    <MudButton Size="Size.Medium" Variant="Variant.Text" Style="text-transform:none; color:#08243D;">Explore</MudButton>
+                    <MudButton Size="Size.Medium" Variant="Variant.Text" Style="text-transform:none; color:#08243D;" Class="ml-6">My Jobs</MudButton>
+                    <MudButton Size="Size.Medium" Variant="Variant.Text" Style="text-transform:none; color:#08243D;" Class="ml-6">Internships</MudButton>
+                    <MudButton Size="Size.Medium" Variant="Variant.Text" Style="text-transform:none; color:#08243D;" Class="ml-6">Resources</MudButton>
+                    <MudButton Size="Size.Medium" Variant="Variant.Text" Style="text-transform:none; color:#08243D;" Class="ml-6">Support</MudButton>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudButton Size="Size.Small" StartIcon="@Icons.Material.Outlined.People" Variant="Variant.Filled" Style="text-transform:none; background-color:#D8E4EA; color:#136BBE; float:right">Member Features</MudButton>
+                </MudItem>
+            </MudGrid>
+
             @Body
+
             <MudGrid Style="background-color:#F0F7FB;" Justify="Justify.Center">
                 <MudItem xs="10">
                     <MudGrid Class="mt-8">
@@ -131,7 +146,7 @@
                         </MudItem>
                     </MudGrid>
                     <MudGrid Justify="Justify.FlexEnd" Class="mt-4">
-                        <MudImage Src="Images/image 4.png" Height="70" Width="140" Href />
+                        <MudImage Src="Images/image 4.png" Height="70" Width="140" />
                     </MudGrid>
                     <MudGrid Class="mt-6">
                         <MudItem xs="6">
