@@ -1,0 +1,78 @@
+﻿@layout MembershipLayout
+@page "/signin"
+
+<MudGrid Justify="Justify.Center" Class="mt-8 mb-8">
+    <MudItem xs="8">
+        <MudGrid Justify="Justify.Center" Class="border">
+            <MudItem xs="12">
+                <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="pb-2">Member Sign In</MudText>
+                <MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2">Job Seeker Login. Employers should click the "Employer" tab above.</MudText>
+                <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2"><b>Not yet a member?</b> <a href="" style="font-family: 'Inter'; color:#08243D; text-decoration: underline solid #08243D 1px;">Click Here to see what the membership offers</a></MudText>
+            </MudItem>
+            <MudItem xs="12">
+                <MudGrid Class="mb-2">
+                    <MudItem xs="6">
+                        <MudCard>
+                            <MudCardContent>
+                                <MudGrid>
+                                    <MudItem xs="12" Style="background-color:#EEF5F8" Class="border-bottom">
+                                        <MudText Typo="Typo.h6" Style="font-family: 'Inter'; color:#08243D;"><b>Sign In</b></MudText>
+                                     </MudItem>
+                                     <MudItem xs="12">
+                                        <MudTextField Label="Email" @bind-Value="Email" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>Email)" Required="true"></MudTextField>
+                                        <MudTextField @bind-Value="Password" Label="Password" Margin="Margin.Dense" Variant="Variant.Outlined" Class="mt-4" For="@(()=>Password)" Required="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowPassword" AdornmentAriaLabel="Show Password" />
+                                        <MudCheckBox @bind-Checked="@Label_CheckBox2" Label="Remember Me" Style="font-family: 'Inter'; color:#08243D;"></MudCheckBox>
+                                        <MudGrid>
+                                        <MudItem xs="3">
+                                                <MudFab Size="Size.Small" Style="background-color: #689F38; color: #FFFFFF; text-transform:none;" Label="&nbsp;&nbsp;Login&nbsp;&nbsp;" />
+                                        </MudItem>
+                                        <MudItem xs="9">
+                                                <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="mt-2"><a href="" style="font-family: 'Inter'; color:#08243D; text-decoration: underline solid #08243D 1px;">Forget Your Password?</a></MudText>
+                                        </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                 </MudGrid>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="1"></MudItem>
+                    <MudItem xs="4">
+                        <MudGrid>
+                            <MudItem xs="12">
+                                <MudText Typo="Typo.h6" Style="font-family: 'Inter'; color:#08243D; text-decoration: underline solid #08243D 1px;"><b><a href="">Get early access to the jobs!</a></b></MudText>
+                                <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;"><span style="font-size: 11px; background-color:#42A5F5;" class="text-white rounded-1">&nbsp;MEMBERS ONLY&nbsp;</span>&nbsp;Take a look at what advantages you get with the job seeker membership. <a href="" style="font-family: 'Inter'; color:#08243D; text-decoration: underline solid #08243D 1px;">Click Here</a></MudText>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
+
+
+@code {
+    private string Email { get; set; } = string.Empty;       
+    private string Password { get; set; } = string.Empty;
+    private bool Label_CheckBox2 { get; set; }
+
+    bool isShow;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void ShowPassword()
+    {
+        @if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+}
