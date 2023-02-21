@@ -1,0 +1,30 @@
+﻿@layout MembershipLayout
+@page "/ConfirmEmail/{userId:int}/{code}"
+@inject HttpClient Http
+@inject NavigationManager navigationManager
+@inject MudBlazor.ISnackbar snackBar
+
+
+
+@code{
+    [Parameter]
+    public int UserId { get; set; }
+
+    [Parameter]
+    public string? Code { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var response = await Http.GetAsync($"api/ApplicationUser/{UserId}/{Code}");
+        if (!response.IsSuccessStatusCode)
+        {
+            snackBar.Add("Thank you for confirming your email.", Severity.Success);
+            navigationManager.NavigateTo("/signup");
+        }
+        else
+        {
+            snackBar.Add("Error confirming your email.", Severity.Error);
+            navigationManager.NavigateTo("/signup");
+        }
+    }
+}

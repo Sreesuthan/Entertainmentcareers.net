@@ -1,5 +1,11 @@
 ﻿@layout MembershipLayout
 @page "/signin"
+@using Entertainmentcareers.net.Shared;
+@inject HttpClient Http
+@inject NavigationManager navigationManager
+@inject MudBlazor.ISnackbar snackBar
+@inject AuthenticationStateProvider AuthStateProvider
+@inject ILocalStorageService LocalStorage
 
 <MudGrid Justify="Justify.Center" Class="mt-8 mb-8">
     <MudItem xs="8">
@@ -14,24 +20,36 @@
                     <MudItem xs="6">
                         <MudCard>
                             <MudCardContent>
+                                <EditForm Model="signIn" OnValidSubmit="HandleSubmit">
+                                <DataAnnotationsValidator />
                                 <MudGrid>
                                     <MudItem xs="12" Style="background-color:#EEF5F8" Class="border-bottom">
                                         <MudText Typo="Typo.h6" Style="font-family: 'Inter'; color:#08243D;"><b>Sign In</b></MudText>
                                      </MudItem>
+                                        @{
+                                            if (Error.Length > 0)
+                                            {
+                                                <MudItem xs="12">
+                                                    <MudAlert Severity="Severity.Error" Dense="true">@Error</MudAlert>
+                                                </MudItem>
+                                            }
+                                        }
                                      <MudItem xs="12">
-                                        <MudTextField Label="Email" @bind-Value="Email" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>Email)" Required="true"></MudTextField>
-                                        <MudTextField @bind-Value="Password" Label="Password" Margin="Margin.Dense" Variant="Variant.Outlined" Class="mt-4" For="@(()=>Password)" Required="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowPassword" AdornmentAriaLabel="Show Password" />
-                                        <MudCheckBox @bind-Checked="@Label_CheckBox2" Label="Remember Me" Style="font-family: 'Inter'; color:#08243D;"></MudCheckBox>
+                                            <MudTextField Label="Email" @bind-Value="signIn.Email" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>signIn.Email)" Required="true"></MudTextField>
+                                        <MudTextField @bind-Value="signIn.Password" Label="Password" Margin="Margin.Dense" Variant="Variant.Outlined" Class="mt-4" For="@(()=>signIn.Password)" Required="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowPassword" AdornmentAriaLabel="Show Password" />
+                                            <MudCheckBox @bind-Checked="signIn.RememberMe" Label="Remember Me" Style="font-family: 'Inter'; color:#08243D;"></MudCheckBox>
                                         <MudGrid>
                                         <MudItem xs="3">
-                                                <MudFab Size="Size.Small" Style="background-color: #689F38; color: #FFFFFF; text-transform:none;" Label="&nbsp;&nbsp;Login&nbsp;&nbsp;" />
+                                                <MudFab Size="Size.Small" ButtonType="ButtonType.Submit" Style="background-color: #689F38; color: #FFFFFF; text-transform:none;" Label="&nbsp;&nbsp;Login&nbsp;&nbsp;" />
                                         </MudItem>
                                         <MudItem xs="9">
                                                 <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="mt-2"><a href="" style="font-family: 'Inter'; color:#08243D; text-decoration: underline solid #08243D 1px;">Forget Your Password?</a></MudText>
                                         </MudItem>
                                         </MudGrid>
                                     </MudItem>
-                                 </MudGrid>
+                                </MudGrid>
+                                 
+                </EditForm>
                             </MudCardContent>
                         </MudCard>
                     </MudItem>
@@ -52,9 +70,8 @@
 
 
 @code {
-    private string Email { get; set; } = string.Empty;       
-    private string Password { get; set; } = string.Empty;
-    private bool Label_CheckBox2 { get; set; }
+    SignIn signIn = new SignIn();
+    public string Error { get; set; } = string.Empty;
 
     bool isShow;
     InputType PasswordInput = InputType.Password;
@@ -73,6 +90,30 @@
             isShow = true;
             PasswordInputIcon = Icons.Material.Filled.Visibility;
             PasswordInput = InputType.Text;
+        }
+    }
+
+    public async Task HandleSubmit()
+    {
+        var response = await Http.PostAsJsonAsync("/api/ApplicationUser/signin", signIn);
+        if (response.IsSuccessStatusCode)
+        {
+            var token = await response.Content.ReadAsStringAsync();
+            await LocalStorage.SetItemAsync("token", token);
+            await AuthStateProvider.GetAuthenticationStateAsync();
+
+            snackBar.Add("Signed In Successfully...!", Severity.Success);
+            navigationManager.NavigateTo("/");
+        }
+
+        if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        {
+            var error = await response.Content.ReadAsStringAsync();
+            if (error != null)
+            {
+                Error = error;
+            }
+            navigationManager.NavigateTo("/signin");
         }
     }
 }

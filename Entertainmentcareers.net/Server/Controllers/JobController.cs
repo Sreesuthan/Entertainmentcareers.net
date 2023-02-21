@@ -49,6 +49,14 @@ namespace Entertainmentcareers.net.Server.Controllers
             return Ok(categories);
         }
 
+        [HttpGet("companies")]
+        public async Task<ActionResult<List<Companies>>> GetAllCompanies()
+        {
+            using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            IEnumerable<Companies> companies = await connection.QueryAsync<Companies>("select * from Companies Order by Company");
+            return Ok(companies);
+        }
+
         [HttpPost]
         public async Task<ActionResult<List<Job>>> CreateJob(Job job)
         {

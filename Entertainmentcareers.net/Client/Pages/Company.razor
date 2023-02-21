@@ -1,0 +1,63 @@
+﻿@layout JobSeekerLayout
+@page "/companies"
+@using Entertainmentcareers.net.Shared;
+@inject HttpClient Http
+@inject NavigationManager navigationManager
+
+<MudGrid Class="mt-8 mb-10" Justify="Justify.Center">
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="9">
+            <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="pb-2">Who posts with EntertainmentCareers.Net?</MudText>
+            <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2">We frequently get this question and with over 24 years in business and over 30,0000 employers posting with us, we jokingly say that it would be quicker if we tell you who doesn't use our service.</MudText>
+        </MudItem>
+    </MudGrid>
+    <MudItem xs="3">
+        <MudPaper  MaxHeight="700px" MaxWidth="100%" Outlined="true">
+            @foreach (var company in companies.Take(7))
+            {
+                        <MudList Clickable="true" Dense="true">
+                    <MudListItem Text="@company.Company" Style="font-family: 'Inter'; color:#08243D;" OnClick="()=>FindJob(company.Id)" Icon="@Icons.Material.Filled.Send" IconSize="Size.Small" />
+                        </MudList>
+            }
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="3">
+        <MudPaper  MaxHeight="700px" MaxWidth="100%" Outlined="true">
+            @foreach (var company in companies.Skip(7).Take(7).ToList())
+            {
+                        <MudList Clickable="true" Dense="true">
+                    <MudListItem Text="@company.Company" Style="font-family: 'Inter'; color:#08243D;" OnClick="()=>FindJob(company.Id)" Icon="@Icons.Material.Filled.Send" IconSize="Size.Small" />
+                        </MudList>
+            }
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="3">
+        <MudPaper MaxHeight="700px" MaxWidth="100%" Outlined="true">
+            @foreach (var company in companies.TakeLast(7))
+            {
+                        <MudList Clickable="true" Dense="true">
+                    <MudListItem Text="@company.Company" Style="font-family: 'Inter'; color:#08243D;" OnClick="()=>FindJob(company.Id)" Icon="@Icons.Material.Filled.Send" IconSize="Size.Small" />
+                        </MudList>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+
+
+@code {
+    public List<Companies> companies = new List<Companies>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await Http.GetFromJsonAsync<List<Companies>>("api/Job/companies");
+        if (result != null)
+        {
+            companies = result;
+        }
+    }
+    void FindJob(int id)
+    {
+        
+    }
+}
