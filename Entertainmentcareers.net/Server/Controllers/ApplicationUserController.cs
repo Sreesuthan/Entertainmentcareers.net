@@ -60,8 +60,8 @@ namespace Entertainmentcareers.net.Server.Controllers
 
             token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-            String? link = Url.PageLink("/ConfirmEmail", "ConfirmEmail", new { Token = token }, Request.Scheme);
-            SendEmail(link, request.Email);
+            //String? link = Url.PageLink("/ConfirmEmail", "ConfirmEmail", new { Token = token }, Request.Scheme);
+            //SendEmail(link, request.Email);
 
             _context.Members.Add(member);
             await _context.SaveChangesAsync();
@@ -101,9 +101,9 @@ namespace Entertainmentcareers.net.Server.Controllers
         public async Task<ActionResult<ApplicationUser>> GetUser(string username)
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-            var user = await connection.QueryFirstAsync<ApplicationUser>("select * from Members where Email = @UserName", new{ UserName = username });
+            var user = await connection.QueryFirstAsync<ApplicationUser>("select * from Members where Email = @UserName", new { UserName = username });
             return Ok(user);
-            }
+        }
 
         private static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
