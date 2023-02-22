@@ -4,6 +4,8 @@
 @inject ILocalStorageService LocalStorage
 @inject MudBlazor.ISnackbar snackBar
 @inject HttpClient Http
+@inject IJSRuntime Js
+@inject NavigationManager navigationManager
 
 <MudThemeProvider />
 <MudDialogProvider />
@@ -207,10 +209,19 @@
             }
         }
     }
+
     async Task LogOut()
     {
-        await LocalStorage.RemoveItemAsync("token");
-        await AuthStateProvider.GetAuthenticationStateAsync();
-        snackBar.Add("Signed In Successfully...!", Severity.Success);
+        if (!await Js.InvokeAsync<bool>("confirm", "Are you want to logout?"))
+        {
+            return;
+        }
+        else
+        {
+            await LocalStorage.RemoveItemAsync("token");
+            await AuthStateProvider.GetAuthenticationStateAsync();
+            snackBar.Add("Logged Out Successfully...!", Severity.Success);
+            navigationManager.NavigateTo("/");
+        }
     }
 }

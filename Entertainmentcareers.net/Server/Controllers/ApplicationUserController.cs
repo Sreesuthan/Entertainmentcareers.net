@@ -55,7 +55,7 @@ namespace Entertainmentcareers.net.Server.Controllers
                 State = request.State,
                 Zip = request.Zip,
                 PlanType = request.PlanType,
-                VerificationToken = token
+                ConfirmationToken = token
             };
 
             token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
@@ -91,7 +91,6 @@ namespace Entertainmentcareers.net.Server.Controllers
             {
                 return BadRequest("Password is incorrect.");
             }
-
             string token = CreateToken(user);
 
             return Ok(token);
@@ -103,6 +102,19 @@ namespace Entertainmentcareers.net.Server.Controllers
             using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             var user = await connection.QueryFirstAsync<ApplicationUser>("select * from Members where Email = @UserName", new { UserName = username });
             return Ok(user);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<List<ApplicationUser>>> UpdateJob(ApplicationUser user)
+        {
+            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            await connection.ExecuteAsync("update Members set FirstName=@FirstName, LastName=@LastName, Street=@Street, City=@City, State=@State, Zip=@Zip, ResumePath=@ResumePath, ResumeFileContentType=@ResumeFileContentType, ResumeOriginalFileName=@ResumeOriginalFileName, ResumeStoredFileName=@ResumeStoredFileName, CoverOriginalFileName=@CoverOriginalFileName, CoverLetterPath=@CoverLetterPath, CoverFileContentType=@CoverFileContentType, CoverStoredFileName=@CoverStoredFileName where Email=@Email", user);  
+            return Ok(await SelectAllUsers(connection));                                                                                                                                                                                                                                                                                                  
+        }                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                           
+        private static async Task<IEnumerable<ApplicationUser>> SelectAllUsers(SqlConnection connection)
+        {
+            return await connection.QueryAsync<ApplicationUser>("select * from Members");
         }
 
         private static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)

@@ -1,0 +1,207 @@
+﻿@page "/joblist"
+@using Entertainmentcareers.net.Shared;
+@inject HttpClient Http
+@inject NavigationManager navigationManager
+@inject MudBlazor.ISnackbar snackBar
+@inject IJSRuntime Js
+
+<MudGrid Justify="Justify.Center" Class="mt-8 mb-8">
+    <MudItem xs="10">
+        <MudGrid Class="border">
+            <MudItem xs="12">
+                <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="pb-2">Manage My Postings</MudText>
+                <MudText Typo="Typo.h6" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2"><b>Edit/Delete/Upgrade postings</b></MudText>
+                <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2">Use this page to view your current or previous postings. You can upgrade or send an email with links to edit/delete your listings.</MudText>
+            </MudItem>
+            <MudItem xs="12">
+                <MudText Typo="Typo.h6" Style="font-family: 'Inter'; color:#08243D;"><b>Step 1 - Enter Your Email Address</b></MudText>
+                    </MudItem>
+            <MudItem xs="6">
+                <MudTextField Label="Email" @bind-Value="Employer" Margin="Margin.Dense" Variant="Variant.Outlined" Required="true"></MudTextField>
+            </MudItem>
+            <MudItem xs="5">
+                <MudFab Size="Size.Small" OnClick="()=>CurrentListings(Employer)" Class="mt-1" Style="background-color: #689F38; color: #FFFFFF; text-transform:none;" Label="Search Current Listings"></MudFab>
+                <MudFab Size="Size.Small" OnClick="()=>PastListings(Employer)" Class="ml-4 mt-1" Style="background-color: #689F38; color: #FFFFFF; text-transform:none;" Label="Search Past Listings"></MudFab>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
+<MudGrid Justify="Justify.Center">
+    <MudItem xs="10">
+    @if (jobs.Count != 0)
+    {
+        <MudTable Items="jobs" Elevation="10" Hover="true" Striped="true" Dense="true" Filter="new Func<Job, bool>(Search)" Class="mt-8 mb-10">
+            <ToolBarContent>
+                <MudSpacer />
+                <MudTextField @bind-Value="searchstring" Placeholder="Search jobs..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" HelperText="Enter Job title or Job Type or Country"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Sr.No</MudTh>
+                <MudTh>Job Title</MudTh>
+                <MudTh>Category</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh>Job/Internship</MudTh>
+                <MudTh>Company</MudTh>
+                <MudTh>State</MudTh>
+                <MudTh>Country</MudTh>
+                <MudTh>Posted On</MudTh>
+                <MudTh>Ends On</MudTh>
+                <MudTh>Status</MudTh>
+                <MudTh>Edit</MudTh>
+                <MudTh>Delete</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Sr.No">@context.SrNo</MudTd>
+                <MudTd DataLabel="JobTitle">@context.JobTitle</MudTd>
+                <MudTd DataLabel="Qualification">@context.Category</MudTd>
+                <MudTd DataLabel="Type">@context.JobType</MudTd>
+                <MudTd DataLabel="Job/Internship">@context.EmploymentType </MudTd>
+                <MudTd DataLabel="Company">@context.CompanyName</MudTd>
+                <MudTd DataLabel="State">@context.State</MudTd>
+                <MudTd DataLabel="Country">@context.Country</MudTd>
+                    @{
+                        if (context.CreateDate.ToString().Length > 0)
+                        {
+                            var date = context.CreateDate.ToString();
+                            string[] strings = date.ToString().Split(' ');
+                            ValidCreateDate = strings[0];
+                        }
+                    }
+                <MudTd DataLabel="Posted On">@ValidCreateDate</MudTd>
+                    @{
+                        if (context.LastDateToApply.ToString().Length > 0)
+                        {
+                            var date = context.LastDateToApply.ToString();
+                            string[] strings = date.ToString().Split(' ');
+                            ValidLastDateToApply = strings[0];
+                        }
+                    }
+                <MudTd DataLabel="Ends On">@ValidLastDateToApply</MudTd>
+                <MudTd DataLabel="Status">@(context.Active == true ? "Active" : "Inactive")</MudTd>
+                <MudTd DataLabel="Edit">
+                    <MudIconButton OnClick="() => EditJob(context.Id, context.Email)"
+                                   Icon="@Icons.Material.Filled.Edit"
+                                   Color="Color.Info"
+                                   Variant="Variant.Filled">
+                    </MudIconButton>
+                </MudTd>
+                <MudTd DataLabel="Delete">
+                    <MudIconButton OnClick="() => DeleteJob(context.Id, context.LastDateToApply, context.Email)"
+                    Icon="@Icons.Material.Filled.Delete" 
+                        Color="Color.Error" 
+                        Variant="Variant.Filled">
+                    </MudIconButton>
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager PageSizeOptions="new int[] {5, 10, 15, 20, 50, 100}" />
+            </PagerContent>
+        </MudTable>
+    }
+    else
+    {
+       <MudText Typo="Typo.body1" Align="Align.Start" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true" Class="mt-8 mb-10">We couldn't find any listings with that email address, please double check the email address you entered and try again. If you are sure that you have listings, and you can't find them, please contact us.</MudText>
+    }
+    </MudItem>
+</MudGrid>
+
+@code {
+    private string searchstring = "";
+    public string ValidCreateDate = string.Empty;
+    public string ValidLastDateToApply = string.Empty;
+    private string? Employer { get; set; }
+
+    public List<Job> jobs = new List<Job>();
+
+    void EditJob(int id, string employer)
+    {
+        navigationManager.NavigateTo($"editjob/{id}");
+    }
+
+    private async Task DeleteJob(int id, DateTime? lastdate, string employer)
+    {
+        if(lastdate > DateTime.Now)
+        {
+            if (!await Js.InvokeAsync<bool>("confirm", "Are you sure you want to delete?"))
+            {
+                return;
+            }
+            else
+            {
+                var result = await Http.DeleteAsync($"api/Job/currentlist/{id}/{employer}");
+                var response = await result.Content.ReadFromJsonAsync<List<Job>>();
+                if(response != null)
+                {
+                    jobs = response;
+                    navigationManager.NavigateTo("joblist");
+                    snackBar.Add("Job Deleted Successfully", Severity.Success);
+                }
+            }
+        }
+        else
+        {
+            if (!await Js.InvokeAsync<bool>("confirm", "Are you sure you want to delete?"))
+            {
+                return;
+            }
+            else
+            {
+                var result = await Http.DeleteAsync($"api/Job/pastlist/{id}/{employer}");
+                var response = await result.Content.ReadFromJsonAsync<List<Job>>();
+                if(response != null)
+                {
+                    jobs = response;
+                    navigationManager.NavigateTo("joblist");
+                    snackBar.Add("Job Deleted Successfully", Severity.Success);
+                }
+            }
+        }
+    }
+
+    private bool Search(Job job)
+    {
+        if (job.JobTitle != null && job.JobType != null && job.Country != null &&
+            (job.JobTitle.Contains(searchstring, StringComparison.OrdinalIgnoreCase) ||
+            job.Country.Contains(searchstring, StringComparison.OrdinalIgnoreCase) ||
+            job.JobType.Contains(searchstring, StringComparison.OrdinalIgnoreCase)))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    async Task CurrentListings(string Employer)
+    {
+        if (Employer.Length > 0)
+        { 
+            var result = await Http.GetFromJsonAsync<List<Job>>($"api/Job/currentlist/{Employer}");
+            if (result != null)
+            {
+                jobs = result;
+            }
+        }
+        else
+        {
+            snackBar.Add("Please Enter your Email Address.", Severity.Warning);
+        }
+    }
+
+    async Task PastListings(string Employer)
+    {
+        if (Employer.Length > 0)
+        { 
+            var result = await Http.GetFromJsonAsync<List<Job>>($"api/Job/pastlist/{Employer}");
+            if (result != null)
+            {
+                jobs = result;
+            }
+        }
+        else
+        {
+            snackBar.Add("Please Enter your Email Address.", Severity.Warning);
+        }        
+    }
+}

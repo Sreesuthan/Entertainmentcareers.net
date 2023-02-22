@@ -1,7 +1,18 @@
-﻿<CascadingAuthenticationState>
+﻿@inject NavigationManager navigationManager
+@inject MudBlazor.ISnackbar snackBar
+
+<CascadingAuthenticationState>
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
-        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <NotAuthorized>
+                @if (context.User.Identity?.IsAuthenticated != true)
+                {
+                    navigationManager.NavigateTo("/signin");
+                    snackBar.Add("You're not Authorized. You need to singin first..", Severity.Error);
+                }
+            </NotAuthorized>
+        </AuthorizeRouteView>
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
     <NotFound>
@@ -12,3 +23,4 @@
     </NotFound>
 </Router>
 </CascadingAuthenticationState>
+

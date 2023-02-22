@@ -1,0 +1,85 @@
+﻿@layout MembershipLayout
+@page "/editprofile/{username}"
+@using Entertainmentcareers.net.Shared;
+@using System.ComponentModel.DataAnnotations;
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@inject HttpClient Http
+@inject NavigationManager navigationManager
+@inject MudBlazor.ISnackbar snackBar
+
+
+<MudGrid Justify="Justify.Center" Class="mt-8 mb-8">
+    <MudItem xs="10">
+        <MudGrid Justify="Justify.Center">
+            <MudItem xs="6" Class="border rounded-1">
+                <EditForm Model="user" OnValidSubmit="HandleSubmit">
+                <DataAnnotationsValidator />
+                <MudGrid Class="mb-2" Spacing="1">
+                    <MudItem xs="12">
+                            <MudText Typo="Typo.h4" Class="mb-2 border-bottom" Style="font-family: 'Inter';font-weight: 700; color:#08243D;">Edit Personal Information</MudText>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.body1" Style="font-family: 'Inter';font-weight: 700; color:#08243D;">Member Name</MudText>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTextField Label="First Name" @bind-Value="user.FirstName" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>user.FirstName)"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTextField Label="Last Name" @bind-Value="user.LastName" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>user.LastName)"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.body1" Style="font-family: 'Inter';font-weight: 700; color:#08243D;">Billing Address</MudText>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField Label="Street" @bind-Value="user.Street" Required="true" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>user.Street)"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTextField Label="City" @bind-Value="user.City" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>user.City)"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudTextField Label="State" @bind-Value="user.State" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>user.State)"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudTextField Label="Zip" @bind-Value="user.Zip" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>user.Zip)"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudFab Size="Size.Medium" ButtonType="ButtonType.Submit" Style="background-color: #689F38; color: #FFFFFF; text-transform:none;" Class="mt-4" Label="&nbsp;&nbsp;Update&nbsp;&nbsp;" />
+                    </MudItem>
+                    </MudGrid>
+                </EditForm>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
+
+
+@code{
+    [Parameter]
+    public string? UserName { get; set; }
+
+    ApplicationUser user = new ApplicationUser();
+    List<ApplicationUser> users = new List<ApplicationUser>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var result = await Http.GetFromJsonAsync<ApplicationUser>($"api/ApplicationUser/user/{UserName}");
+        if (result != null)
+        {
+            user = result;
+        }
+    }
+    public async Task HandleSubmit()
+    {
+        var result = await Http.PutAsJsonAsync("api/ApplicationUser", user);
+        var response = await result.Content.ReadFromJsonAsync<List<ApplicationUser>>();
+        if (response != null)
+        {
+            users = response;
+        }
+        navigationManager.NavigateTo("profile", true);
+        snackBar.Add("Personal Details Updated Successfully", Severity.Success);
+    }
+}
+
+

@@ -1,5 +1,5 @@
 ﻿@layout EmployerLayout
-@page "/postjob"
+@page "/editjob/{id:int}"
 @using Entertainmentcareers.net.Shared;
 @inject IJobService JobService
 @inject HttpClient Http
@@ -16,28 +16,18 @@
                 <DataAnnotationsValidator />
                 <MudCard Class="mt-8 mb-4">
             <MudCardContent>
-            <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="mb-5 border-bottom pb-2" GutterBottom="true">Post a Job</MudText>
+            <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="mb-5 border-bottom pb-2" GutterBottom="true">Edit Job</MudText>
                 <MudGrid Class="mb-4">
-                    <MudItem xs="9" Style="background-color:#EEF5F8">
-                        <MudGrid Spacing="1">
-                            <MudItem xs="12">
-                                   <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true"><MudIcon Icon="@Icons.Material.Outlined.Lock"/> Your Contact Information (Not visible to job seekers)</MudText>
-                                   <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Enter compay email address.<br />Email address will not be seen by the public.<br />It is only used to manage your postings.</MudText>
-                            </MudItem>
-                            <MudItem xs="9">
-                                       <MudTextField Label="Email" @bind-Value="job.Email" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>job.Email)" Required="true"></MudTextField>
-                            </MudItem>
-                            <MudItem xs="1">
-                                <MudTooltip Placement="Placement.Top" Text="A private email address is required. This address is used to manage your postings.">
-                                            <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                </MudTooltip>
-                            </MudItem>
-                        </MudGrid>
-                    </MudItem>
-                    <MudItem xs="9" Class="mt-4">
+                    <MudItem xs="9">
                         <MudGrid Spacing="1">
                             <MudItem xs="12" Class="mt-2">
                                 <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Job Posting Information (Visible to job seekers)</MudText>
+                            </MudItem>
+                            <MudItem xs="2" Class="mt-3">
+                                            <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Job Status*</MudText>
+                                        </MudItem>
+                            <MudItem xs="10" Class="mt-2">
+                                            <MudSwitch Label="@(job.Active ? "Active" : "Inactive")" Style="font-family: 'Inter'; color:#08243D;" @bind-Checked="job.Active" Color="Color.Primary"></MudSwitch>
                             </MudItem>
                             <MudItem xs="4" Class="mt-2">
                                 <MudSelect Label="Job Type" Margin="Margin.Dense" Variant="Variant.Outlined" @bind-Value="job.JobType" For="@(()=>job.JobType)"  Required="true">
@@ -448,6 +438,8 @@
 
 
 @code {
+    [Parameter]
+    public int Id { get; set; }
 
     Job job { get; set; } = new Job();
     public List<JobType> jobTypes = new List<JobType>();
@@ -486,6 +478,30 @@
         }
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        if(Id != null)
+        {
+            job = await JobService.GetSingleJob((int)Id);
+            if (job.EmploymentType == "Job")
+            {
+                EmploymentType = "Job";
+            }
+            else
+            {
+                EmploymentType = "Internship";
+            }
+            if(job.EmploymentType == "Paid Internship")
+            {
+                InternshipType = job.EmploymentType;
+            }
+            else
+            {
+                InternshipType = job.EmploymentType;
+            }
+        }
+    }
+
     async Task ReallyLeave(LocationChangingContext context)
     {
         var confirmed = await Js.InvokeAsync<bool>("window.confirm", "Changes you made may not be saved. Are sure you wanna leave?");
@@ -499,14 +515,14 @@
     {
         AllowLeave = true;
         IsPreview = true;
-        navigationManager.NavigateTo("postjob");
+        navigationManager.NavigateTo($"editjob/{Id}");
     }
 
     void Edit()
     {
         AllowLeave = true;
         IsPreview = false;
-        navigationManager.NavigateTo("postjob");
+        navigationManager.NavigateTo($"editjob/{Id}");
     }
 
     async Task Submit()
@@ -535,11 +551,9 @@
                     job.EmploymentType = InternshipType;
                 }
             }
-            job.CreateDate = DateTime.Now;
-            job.Active = true;
             job.Employer = "Sree";
-            await JobService.CreateJob(job);
-            snackBar.Add("Job/Intership Posted Successfully", Severity.Success);
+            await JobService.UpdateJob(job);
+            snackBar.Add("Job/Intership Updated Successfully", Severity.Success);
             IsPreview = false;
         }
         else

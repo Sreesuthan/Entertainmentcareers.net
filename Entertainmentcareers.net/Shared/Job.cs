@@ -50,5 +50,8 @@ namespace Entertainmentcareers.net.Shared
         public DateTime? LastDateToApply { get; set; }
         [NotMapped]
         public long DateDiffMin { get; set; }
+        [NotMapped]
+        public int SrNo { get; set; }
+        
     }
 }

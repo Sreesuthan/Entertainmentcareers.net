@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Entertainmentcareers.net.Client.Pages;
 using Entertainmentcareers.net.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -57,12 +58,68 @@ namespace Entertainmentcareers.net.Server.Controllers
             return Ok(companies);
         }
 
+        [HttpGet("currentlist/{employer}")]
+        public async Task<ActionResult<List<Job>>> GetAllCurrentJobs(string employer)
+        {
+            using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            IEnumerable<Job> jobs = await connection.QueryAsync<Job>("select ROW_NUMBER() over(order by (select 1)) as [SrNo], Id, Email, EmploymentType, JobType, CompanyName, JobTitle, Country, State, Active, Category, CreateDate, LastDateToApply from Jobs where Email=@Employer and LastDateToApply > GETDATE() order by Id desc", new { Employer = employer });
+            return Ok(jobs);
+        }
+
+        [HttpGet("pastlist/{employer}")]
+        public async Task<ActionResult<List<Job>>> GetAllPastJobs(string employer)
+        {
+            using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            IEnumerable<Job> jobs = await connection.QueryAsync<Job>("select ROW_NUMBER() over(order by (select 1)) as [SrNo], Id, Email, EmploymentType, JobType, CompanyName, JobTitle, Country, State, Active, Category, CreateDate, LastDateToApply from Jobs where Email=@Employer and LastDateToApply < GETDATE() order by Id desc", new { Employer = employer });
+            return Ok(jobs);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Job>> GetJob(int id)
+        {
+            try
+            {
+                using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+                var job = await connection.QueryFirstAsync<Job>("select * from Jobs where Id=@id",
+                    new { id = id });
+                return Ok(job);
+            }
+            catch
+            {
+                return BadRequest("job details not found...");
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<List<Job>>> CreateJob(Job job)
         {
             using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
             await connection.ExecuteAsync("Insert into Jobs values(@Email, @EmploymentType, @JobType, @CompanyName, @ShowCompanyName, @JobTitle, @JobCode, @City, @Country, @State, @Website, @Details, @Instructions, @Salary, @AdditionalComments, @InstructionForUs, @Active, @Employer, @Category, @CreateDate, @LastDateToApply)", job);
             return Ok(await SelectAllJobs(connection));
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<List<Job>>> UpdateJob(Job job)
+        {
+            using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            await connection.ExecuteAsync("update jobs set Email=@Email, EmploymentType=@EmploymentType, JobType=@JobType, CompanyName=@CompanyName, ShowCompanyName=@ShowCompanyName, JobTitle=@JobTitle, JobCode=@JobCode, City=@City, Country=@Country, State=@State, Website=@Website, Details=@Details, Instructions=@Instructions, Salary=@Salary, AdditionalComments=@AdditionalComments, InstructionForUs=@InstructionForUs, Active=@Active, Employer=@Employer, Category=@Category, LastDateToApply=@LastDateToApply where Id = @Id", job);
+            return Ok(await SelectAllJobs(connection));
+        }
+
+        [HttpDelete("currentlist/{id}/{employer}")]
+        public async Task<ActionResult<List<Job>>> DeletecurrentlistJob(int id, string employer)
+        {
+            using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            await connection.ExecuteAsync("delete from Jobs where Id=@Id", new { Id = id });
+            return Ok(await connection.QueryAsync<Job>("select ROW_NUMBER() over(order by (select 1)) as [SrNo], Email, EmploymentType, JobType, CompanyName, JobTitle, Country, State, Active, Category, CreateDate, LastDateToApply from Jobs where Email=@Employer and LastDateToApply > GETDATE() order by Id desc", new { Employer = employer }));
+        }
+
+        [HttpDelete("pastlist/{id}/{employer}")]
+        public async Task<ActionResult<List<Job>>> DeletepastlistJob(int id, string employer)
+        {
+            using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            await connection.ExecuteAsync("delete from Jobs where Id=@Id", new { Id = id });
+            return Ok(await connection.QueryAsync<Job>("select ROW_NUMBER() over(order by (select 1)) as [SrNo], Email, EmploymentType, JobType, CompanyName, JobTitle, Country, State, Active, Category, CreateDate, LastDateToApply from Jobs where Email=@Employer and LastDateToApply < GETDATE() order by Id desc", new { Employer = employer }));
         }
 
         private static async Task<IEnumerable<Job>> SelectAllJobs(SqlConnection connection)

@@ -23,5 +23,27 @@ namespace Entertainmentcareers.net.Client.Services.JobService
             jobs = response;
             _navigationManager.NavigateTo($"postjob");
         }
+
+        public async Task<Job> GetSingleJob(int id)
+        {
+            var result = await _http.GetFromJsonAsync<Job>($"api/Job/{id}");
+            if (result != null)
+            {
+                return result;
+            }
+            else
+            {
+                throw new Exception("Job not found");
+            }
+        }
+
+
+        public async Task UpdateJob(Job job)
+        {
+            var result = await _http.PutAsJsonAsync("api/Job", job);
+            var response = await result.Content.ReadFromJsonAsync<List<Job>>();
+            jobs = response;
+            _navigationManager.NavigateTo($"Joblist"); 
+        }
     }
 }
