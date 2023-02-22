@@ -1,0 +1,95 @@
+﻿@layout JobSeekerLayout
+@page "/category"
+@inject HttpClient Http
+@inject NavigationManager navigationManager
+
+
+<MudGrid Class="mt-8 mb-10" Justify="Justify.Center">
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="9">
+            <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="pb-2">Entertainment Jobs</MudText>
+        </MudItem>
+    </MudGrid>
+    <MudItem xs="3">
+        <MudPaper  MaxHeight="700px" MaxWidth="100%" Outlined="true">
+            @foreach(var category in categories.Take(7))
+            {
+                    @if(categoryLegends.Any(cl => cl.Category.Equals(category.Category)))
+                    {
+                        <MudList Clickable="true" Dense="true">
+                        <MudListItem OnClick="()=>FindJob(category.Category)" Icon="@Icons.Material.Filled.Send" IconSize="Size.Small">@category.Category <span style="font-size: 11px; background-color:#689F38;" class="text-white rounded-1">&nbsp;NEW&nbsp;</span></MudListItem>
+                        </MudList>
+                    }
+                    else
+                    {
+                        <MudList Clickable="true" Dense="true">
+                        <MudListItem Text="@category.Category" OnClick="()=>FindJob(category.Category)" Icon="@Icons.Material.Filled.Send" IconSize="Size.Small" />
+                        </MudList>
+                    }
+            }
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="3">
+        <MudPaper  MaxHeight="700px" MaxWidth="100%" Outlined="true">
+            @foreach (var category in categories.Skip(7).Take(7).ToList())
+            {
+                    @if (categoryLegends.Any(cl => cl.Category.Equals(category.Category)))
+                    {
+                        <MudList Clickable="true" Dense="true">
+                        <MudListItem OnClick="()=>FindJob(category.Category)" Icon="@Icons.Material.Filled.Send" IconSize="Size.Small">@category.Category <span style="font-size: 11px; background-color:#689F38;" class="text-white rounded-1">&nbsp;NEW&nbsp;</span></MudListItem>
+                        </MudList>
+                    }
+                    else
+                    {
+                        <MudList Clickable="true" Dense="true">
+                        <MudListItem Text="@category.Category" OnClick="()=>FindJob(category.Category)" Icon="@Icons.Material.Filled.Send" IconSize="Size.Small" />
+                        </MudList>
+                    }
+            }
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="3">
+        <MudPaper MaxHeight="700px" MaxWidth="100%" Outlined="true">
+            @foreach (var category in categories.TakeLast(6))
+            {
+                    @if (categoryLegends.Any(cl => cl.Category.Equals(category.Category)))
+                    {
+                        <MudList Clickable="true" Dense="true">
+                        <MudListItem OnClick="()=>FindJob(category.Category)" Icon="@Icons.Material.Filled.Send" IconSize="Size.Small">@category.Category <span style="font-size: 11px; background-color:#689F38;" class="text-white rounded-1">&nbsp;NEW&nbsp;</span></MudListItem>
+                        </MudList>
+                    }
+                    else
+                    {
+                        <MudList Clickable="true" Dense="true">
+                        <MudListItem Text="@category.Category" OnClick="()=>FindJob(category.Category)" Icon="@Icons.Material.Filled.Send" IconSize="Size.Small" />
+                        </MudList>
+                    }
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+
+
+@code {
+    public List<Categories> categories = new List<Categories>();
+    public List<Categories> categoryLegends = new List<Categories>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await Http.GetFromJsonAsync<List<Categories>>("api/Job/categories");
+        if (result != null)
+        {
+            categories = result;
+        }
+        var result1 = await Http.GetFromJsonAsync<List<Categories>>("api/Job/categories/legends");
+        if (result1 != null)
+        {
+            categoryLegends = result1;
+        }
+    }
+    void FindJob(string category)
+    {
+        navigationManager.NavigateTo($"findjob/{category}");
+    }
+}

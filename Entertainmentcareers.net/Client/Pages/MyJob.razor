@@ -1,0 +1,125 @@
+﻿@layout EmployerLayout
+@page "/myjobs"
+@using Entertainmentcareers.net.Shared;
+@inject AuthenticationStateProvider AuthStateProvider
+@inject HttpClient Http
+@inject NavigationManager navigationManager
+
+<MudGrid Justify="Justify.Center" Class="mt-8 mb-4">
+    <MudItem xs="10">
+        <MudGrid Class="border">
+            <MudItem xs="12">
+                <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="pb-2">My Jobs</MudText>
+                <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2">Custom View <span style="font-size: 14px; background-color:#42A5F5;" class="text-white rounded-1">&nbsp;MEMBERS ONLY&nbsp;</span></MudText>
+                <MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2">This custom "My Jobs" view will only show that match your "<i>Job Preferences</i>"</MudText>
+                @if (jobs.Count != 0)
+                {
+                    <MudTable @ref="_table" T="Job" Items="jobs"  Elevation="10" Hover="true" Striped="true" Filter="new Func<Job, bool>(Search)" OnRowClick="@OnRowClick" Class="mt-1 mb-4">
+                    <ToolBarContent>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="searchstring" Placeholder="Search jobs..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" HelperText="Enter Job title or State or Country"></MudTextField>
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh>Sr.No</MudTh>
+                        <MudTh>Job Title</MudTh>
+                        <MudTh>Company</MudTh>
+                        <MudTh>Location</MudTh>
+                        <MudTh>Ends On</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Sr.No">@context.SrNo</MudTd>
+                        @{
+                            if (context.DateDiffMin < 7200)
+                            {
+                                isNew = true;
+                            }
+                            else
+                            {
+                                isNew = false;
+                            }
+                        }
+                            <MudTd DataLabel="JobTitle">
+                                @context.JobTitle&nbsp;
+                                @if (isNew) 
+                                {
+                                    <span style="font-size: 11px; background-color:#689F38;" class="text-white rounded-1">&nbsp;NEW&nbsp;</span>
+                                }
+                            </MudTd>
+                        <MudTd DataLabel="Company">@context.CompanyName</MudTd>
+                        <MudTd DataLabel="Location">@context.State, @context.Country</MudTd>
+                        @{
+                            if (context.LastDateToApply.ToString().Length > 0)
+                            {
+                                var date = context.LastDateToApply.ToString();
+                                string[] strings = date.ToString().Split(' ');
+                                ValidLastDateToApply = strings[0];
+                            }
+                        }
+                        <MudTd DataLabel="Ends On">@ValidLastDateToApply</MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[] {5, 10, 15, 20, 50, 100}" />
+                    </PagerContent>
+                </MudTable>
+                }
+                else
+                {
+                    <MudText Typo="Typo.body1" Align="Align.Start" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true" Class="mt-4 mb-4">No  Jobs Found.</MudText>
+                }
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private string searchstring = "";
+    public string ValidLastDateToApply = string.Empty;
+    private MudTable<Job> _table;
+    public bool isNew = false;
+
+    public List<Job> jobs = new List<Job>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var appUser = (await AuthStateProvider.GetAuthenticationStateAsync()).User.Identity;
+        if (!appUser.IsAuthenticated)
+        {
+           navigationManager.NavigateTo("signin");
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var appUser = (await AuthStateProvider.GetAuthenticationStateAsync()).User.Identity;
+        if (appUser.IsAuthenticated)
+        {
+            var result = await Http.GetFromJsonAsync<List<Job>>($"api/Job/activejobs");
+            if (result != null)
+            {
+                jobs = result;
+            }
+        }
+        
+    }
+
+    private bool Search(Job job)
+    {
+        if (job.JobTitle != null && job.State != null && job.Country != null &&
+            (job.JobTitle.Contains(searchstring, StringComparison.OrdinalIgnoreCase) ||
+            job.State.Contains(searchstring, StringComparison.OrdinalIgnoreCase) ||
+            job.Country.Contains(searchstring, StringComparison.OrdinalIgnoreCase)))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    void OnRowClick(TableRowClickEventArgs<Job> args)
+    {
+        int JobId = args.Item.Id;
+        navigationManager.NavigateTo($"viewjob/{JobId}");
+    }
+}

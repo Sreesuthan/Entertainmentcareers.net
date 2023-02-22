@@ -1,11 +1,12 @@
-﻿@page "/joblist"
+﻿@layout EmployerLayout
+@page "/joblist"
 @using Entertainmentcareers.net.Shared;
 @inject HttpClient Http
 @inject NavigationManager navigationManager
 @inject MudBlazor.ISnackbar snackBar
 @inject IJSRuntime Js
 
-<MudGrid Justify="Justify.Center" Class="mt-8 mb-8">
+<MudGrid Justify="Justify.Center" Class="mt-8 mb-4">
     <MudItem xs="10">
         <MudGrid Class="border">
             <MudItem xs="12">
@@ -53,7 +54,7 @@
             <RowTemplate>
                 <MudTd DataLabel="Sr.No">@context.SrNo</MudTd>
                 <MudTd DataLabel="JobTitle">@context.JobTitle</MudTd>
-                <MudTd DataLabel="Qualification">@context.Category</MudTd>
+                    <MudTd DataLabel="Category">@context.Category</MudTd>
                 <MudTd DataLabel="Type">@context.JobType</MudTd>
                 <MudTd DataLabel="Job/Internship">@context.EmploymentType </MudTd>
                 <MudTd DataLabel="Company">@context.CompanyName</MudTd>
@@ -109,7 +110,7 @@
     private string searchstring = "";
     public string ValidCreateDate = string.Empty;
     public string ValidLastDateToApply = string.Empty;
-    private string? Employer { get; set; }
+    private string Employer { get; set; } = string.Empty;
 
     public List<Job> jobs = new List<Job>();
 

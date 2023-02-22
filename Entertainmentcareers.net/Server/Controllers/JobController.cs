@@ -58,11 +58,27 @@ namespace Entertainmentcareers.net.Server.Controllers
             return Ok(companies);
         }
 
+        [HttpGet("categories/legends")]
+        public async Task<ActionResult<List<Categories>>> GetAllCategoryLegends()
+        {
+            using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            IEnumerable<Categories> categories = await connection.QueryAsync<Categories>("  select Id, Category from (select c.Id, c.Category, DATEDIFF(MINUTE, j.CreateDate, GETDATE()) as DateDiffMin from Categories as c inner join jobs as j on c.Category=j.Category Where DATEDIFF(MINUTE, j.CreateDate, GETDATE()) < 7200) as new group by id, Category;");
+            return Ok(categories);
+        }
+
         [HttpGet("currentlist/{employer}")]
         public async Task<ActionResult<List<Job>>> GetAllCurrentJobs(string employer)
         {
             using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
             IEnumerable<Job> jobs = await connection.QueryAsync<Job>("select ROW_NUMBER() over(order by (select 1)) as [SrNo], Id, Email, EmploymentType, JobType, CompanyName, JobTitle, Country, State, Active, Category, CreateDate, LastDateToApply from Jobs where Email=@Employer and LastDateToApply > GETDATE() order by Id desc", new { Employer = employer });
+            return Ok(jobs);
+        }
+
+        [HttpGet("activejobs")]
+        public async Task<ActionResult<List<Job>>> GetAllActiveJobs()
+        {
+            using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            IEnumerable<Job> jobs = await connection.QueryAsync<Job>("select ROW_NUMBER() over(order by (select 1)) as [SrNo], Id, JobTitle, EmploymentType, LastDateToApply, CompanyName, Country, State, Category, DATEDIFF(MINUTE, CreateDate, GETDATE()) as DateDiffMin from Jobs where Active='true'");
             return Ok(jobs);
         }
 

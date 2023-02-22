@@ -1,0 +1,84 @@
+﻿@layout JobSeekerLayout
+@page "/viewjob/{id:int}"
+@using Entertainmentcareers.net.Shared;
+@inject IJobService JobService
+
+<MudGrid Justify="Justify.Center">
+    <MudItem xs="10">
+        <MudCard Class="mt-8 mb-4">
+            <MudCardContent>
+                <MudGrid Class="mb-2" Justify="Justify.Center">
+                <MudItem xs="10" Class="mt-2">
+                    <MudItem xs="12" Class="mt-2">
+                                <MudText Typo="Typo.h4" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.JobTitle</MudText>
+                    </MudItem>
+                    <MudItem xs="12" Class="mt-2">
+                                <MudText Typo="Typo.h5" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.CompanyName</MudText>
+                    </MudItem>
+                    <MudItem xs="12">
+                    <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.City, @job.State, @job.Country</MudText>
+                    </MudItem>
+                    @{
+                        if (job.CreateDate.ToString().Length > 0)
+                        {
+                                var date = job.CreateDate.ToString();
+                            string[] strings = date.ToString().Split(' ');
+                            ValidCreateDate = strings[0];
+                        }
+                    }
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Posted:</b> @ValidCreateDate</MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>@job.JobType</b></MudText>
+                        </MudItem>
+                    <MudItem xs="12">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Details</MudText>
+                    </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">@job.Instructions</MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Salary</b></MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Salary</MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.AdditionalComments</MudText>
+                        </MudItem>
+                        <MudItem xs="12" Class="mt-6 mb-6">
+                            <MudGrid Style="background-color:#EEF5F8">
+                                <MudItem xs="12">
+                                            <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" Class="border-bottom pb-2"><b>Contact the Employer</b></MudText>
+                                </MudItem>
+                                <MudItem xs="12">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">Please tell this employer that you found the listing at <b>EntertainmentCareers.Net</b></MudText>
+                                    <MudText Typo="Typo.body2" Class="mt-4" Style="font-family: 'Inter';color:#08243D;">Please apply online</MudText>
+                                    <MudText Typo="Typo.body2" Class="mt-2" Style="font-family: 'Inter';color:#08243D;"><b>Website:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="@job.Website" style="font-family: 'Inter'; color:#08243D; text-decoration: underline solid #08243D 1px;">Apply At Employer's Site</a></MudText>
+                                </MudItem>
+                            </MudGrid>
+                        </MudItem>
+                        </MudItem>
+                </MudGrid>
+             </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    Job job { get; set; } = new Job();
+
+    public string ValidCreateDate = string.Empty;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id != null)
+        {
+            job = await JobService.GetSingleJob((int)Id);
+        }
+    }
+}
