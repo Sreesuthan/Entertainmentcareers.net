@@ -1,5 +1,5 @@
 ﻿@layout MembershipLayout
-@page "/ConfirmEmail/{userId:int}/{code}"
+@page "/ConfirmEmail/{token}"
 @inject HttpClient Http
 @inject NavigationManager navigationManager
 @inject MudBlazor.ISnackbar snackBar
@@ -8,23 +8,19 @@
 
 @code{
     [Parameter]
-    public int UserId { get; set; }
+    public string? Token { get; set; }
 
-    [Parameter]
-    public string? Code { get; set; }
-
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
-        var response = await Http.GetAsync($"api/ApplicationUser/{UserId}/{Code}");
+        var response = await Http.PostAsJsonAsync($"api/ApplicationUser/verify", Token);
+        if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        {
+            snackBar.Add("Error confirming your email.", Severity.Error);
+        }
         if (!response.IsSuccessStatusCode)
         {
             snackBar.Add("Thank you for confirming your email.", Severity.Success);
-            navigationManager.NavigateTo("/signup");
-        }
-        else
-        {
-            snackBar.Add("Error confirming your email.", Severity.Error);
-            navigationManager.NavigateTo("/signup");
+            navigationManager.NavigateTo("/signin");
         }
     }
 }

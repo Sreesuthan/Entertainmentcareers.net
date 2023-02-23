@@ -95,7 +95,7 @@
                         </MudItem>
                         <MudItem xs="2">
                             <MudTextField Label="Zip" @bind-Value="signUp.Zip" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.Zip)"></MudTextField>
-                        </MudItem>
+                        </MudItem>@*
                         <MudItem xs="12">
                             <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" Class="mb-2"><b>Step 4.</b></MudText>
                         </MudItem>
@@ -146,7 +146,7 @@
                                     <MudCheckBox @bind-Checked="signUp.CheckBox" Label=" I agree and accept." Style="font-family: 'Inter'; color:#08243D;"></MudCheckBox>
                                 </MudItem>
                             </MudGrid>
-                        </MudItem>
+                        </MudItem>*@
                         <MudItem xs="12">
                             <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;"><b>How Did You Find Us? (optional)</b></MudText>
                         </MudItem>
@@ -224,21 +224,45 @@
 
     public async Task HandleSubmit()
     {
-        var response = await Http.PostAsJsonAsync("/api/ApplicationUser/signup", signUp);
-        if (response.IsSuccessStatusCode)
+        if (signUp.PlanType == "Monthly")
         {
-            snackBar.Add("Registered Successfully...!", Severity.Success);
-            navigationManager.NavigateTo("/signin");
+            signUp.PlanPrice = 9.95m;
+        }
+        else if (signUp.PlanType == "3 Months")
+        {
+            signUp.PlanPrice = 29.85m;
+        }
+        else if (signUp.PlanType == "6 Months")
+        {
+            signUp.PlanPrice = 59.70m;
+        }
+        else
+        {
+            signUp.PlanPrice = 119.40m;
         }
 
-        if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        var result = await Http.PostAsJsonAsync("/api/ApplicationUser/emailcheck", signUp);
+        if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
         {
-            var error = await response.Content.ReadAsStringAsync();
+            var error = await result.Content.ReadAsStringAsync();
             if (error != null)
             {
                 Error = error;
             }
             navigationManager.NavigateTo("/signup");
+        }
+        if (result.IsSuccessStatusCode)
+        {
+            var result1 = await Http.PostAsJsonAsync("/api/ApplicationUser/checkout", signUp);
+            var url = await result1.Content.ReadAsStringAsync();
+            navigationManager.NavigateTo(url);
+
+            var result2 = await Http.PostAsJsonAsync("/api/ApplicationUser/signup", signUp);                           
+            if (result2.IsSuccessStatusCode)
+            {
+                snackBar.Add("We have emailed a link for confirm account.", Severity.Success);
+                navigationManager.NavigateTo("/signup");
+            }
         }
     }
 }

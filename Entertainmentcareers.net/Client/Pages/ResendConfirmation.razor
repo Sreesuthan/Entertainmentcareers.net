@@ -1,0 +1,52 @@
+﻿@layout MembershipLayout
+@page "/resendconfirmation"
+@using Entertainmentcareers.net.Shared;
+@inject HttpClient Http
+@inject NavigationManager navigationManager
+@inject MudBlazor.ISnackbar snackBar
+
+
+<MudGrid Justify="Justify.Center" Class="mt-8 mb-8">
+    <MudItem xs="10">
+        <MudGrid Justify="Justify.Center">
+            <MudItem xs="6" Class="border rounded-1">
+                <EditForm Model="verify" OnValidSubmit="HandleSubmit">
+                <DataAnnotationsValidator />
+                <MudGrid Class="mb-2" Spacing="1">
+                    <MudItem xs="12">
+                            <MudText Typo="Typo.h4" Class="mb-2 border-bottom" Style="font-family: 'Inter';font-weight: 700; color:#08243D;">Resend Confirmation Email</MudText>
+                    </MudItem>
+                    <MudItem xs="6">
+                            <MudTextField Label="Email" @bind-Value="verify.Email" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>verify.Email)"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudFab Size="Size.Medium" ButtonType="ButtonType.Submit" Style="background-color: #689F38; color: #FFFFFF; text-transform:none;" Class="mt-4" Label="&nbsp;&nbsp;Submit&nbsp;&nbsp;" />
+                    </MudItem>
+                    </MudGrid>
+                </EditForm>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
+
+
+@code{
+    Entertainmentcareers.net.Shared.ForgotPassword verify = new Entertainmentcareers.net.Shared.ForgotPassword();
+
+    public async Task HandleSubmit()
+    {
+        var response = await Http.PostAsJsonAsync($"api/ApplicationUser/resendverify", verify);
+        if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        {
+            snackBar.Add("Email not found. Please try again.", Severity.Error);
+            navigationManager.NavigateTo("/resendconfirmation");
+        }
+        if (!response.IsSuccessStatusCode)
+        {
+            snackBar.Add("We have emailed a link for confirm account.", Severity.Success);
+            navigationManager.NavigateTo("/signin");
+        }
+    }
+}
+
+

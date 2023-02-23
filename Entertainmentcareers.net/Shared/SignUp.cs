@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,14 +30,7 @@ namespace Entertainmentcareers.net.Shared
         public string Zip { get; set; } = string.Empty;
         [Required]
         public string PlanType { get; set; } = "Monthly";
-        [Required]
-        public string CreditCard { get; set; } = string.Empty;
-        [Required]
-        public string Month { get; set; } = string.Empty;
-        [Required]
-        public string Year { get; set; } = string.Empty;
+        public decimal PlanPrice { get; set; }
         public string About { get; set; } = string.Empty;
-        [Required]
-        public bool CheckBox { get; set; } = true;
     }
 }
