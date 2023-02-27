@@ -1,5 +1,5 @@
-﻿@layout MembershipLayout
-@page "/ConfirmEmail/{token}"
+﻿@layout JobSeekerLayout
+@page "/ConfirmAlertEmail/{token}/{email}"
 @inject HttpClient Http
 @inject NavigationManager navigationManager
 @inject MudBlazor.ISnackbar snackBar
@@ -9,22 +9,24 @@
 @code{
     [Parameter]
     public string Token { get; set; } = string.Empty;
+    [Parameter]
+    public string Email { get; set; } = string.Empty;
 
     Token token = new Token();
 
     protected override async Task OnInitializedAsync()
     {
         token.VerificationToken = Token;
-        var response = await Http.PostAsJsonAsync($"api/ApplicationUser/verify", token);
+        var response = await Http.PostAsJsonAsync($"api/Alert/verify", token);
         if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
         {
             snackBar.Add("Error confirming your email. Please try again.", Severity.Error);
-            navigationManager.NavigateTo("/signin");
+            navigationManager.NavigateTo("/jobalert");
         }
         if (response.IsSuccessStatusCode)
         {
             snackBar.Add("Thank you for confirming your email.", Severity.Success);
-            navigationManager.NavigateTo("/signin");
+            navigationManager.NavigateTo($"/alertconfirmedmessage/{Email}");
         }
     }
 }

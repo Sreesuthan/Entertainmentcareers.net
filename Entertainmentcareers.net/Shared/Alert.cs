@@ -10,9 +10,11 @@ namespace Entertainmentcareers.net.Shared
 {
     public class Alert
     {
+        public int Id { get; set; }
         [Required]
         [EmailAddress(ErrorMessage ="Enter valid email address.")]
         public string Email { get; set; } = string.Empty;
+        [NotMapped]
         [Required]
         [Compare(nameof(Email), ErrorMessage = "Email and Confirm Email Should be same")]
         public string ConfirmEmail { get; set; } = string.Empty;
@@ -20,7 +22,10 @@ namespace Entertainmentcareers.net.Shared
         public string Name { get; set; } = string.Empty;
         [Required]
         public string Zip { get; set; } = string.Empty;
-        public bool NewsLetterJob { get; set; }
-        public bool NewsLetterIntership { get; set; }
+        public bool NewsLetterJob { get; set; } = false;
+        public bool NewsLetterIntership { get; set; } = false;
+        public string ConfirmationToken { get; set; } = string.Empty;
+        public DateTime? ConfirmedAt { get; set; } = null;
+        public bool IsConfirmed { get; set; } = false;
     }
 }

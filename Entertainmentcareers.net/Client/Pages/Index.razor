@@ -1,30 +1,63 @@
 ﻿@page "/"
+@page "/{isloggedout:bool}"
+@inject MudBlazor.ISnackbar snackBar
 
-<MudGrid Style="background-image: url('Images/Rectangle 14.png'); background-color:#070D21" Class="mt-3">
-	<MudItem xs="6" Class="mt-10 ml-15 mb-16">
-				<MudText Style="font-family: 'Oswald';font-weight: 400;font-size: 61px;" Class="text-white">ENTERTAINMENT<br/>JOBS & INTERNSHIPS</MudText>
-		<MudText Style="font-family: 'Inter';font-weight: 400;font-size: 20px;" Class="text-white">23 years of helpeding people start and build their Entertainment <br />and Digital Media careers.</MudText>
-		<MudGrid Justify="Justify.Center">
-			<MudItem xs="6" Class="text-center">
-				<MudButton Href="/category" Size="Size.Large" Style="background-color: #B7DF38; color: #0D3255; width: 307px; height: 69px;" Class="mt-13" Variant=" Variant.Filled">Browse Jobs</MudButton>
-				<MudText Style="font-family: 'Inter';font-weight: 400;font-size: 16px;" Align="Align.Left" Class="text-white text-center"><b>12,973</b> Active Entertainment Jobs</MudText>
-		</MudItem>
-			<MudItem xs="6" Class="text-center">
-				<MudButton Href="/postjob" Size="Size.Large" Style="background-color: #136BBE; color: #FFFFFF; width: 268px; height: 69px;" Class="mt-13" Variant="Variant.Filled">Post a Job</MudButton>
-				<MudText Style="font-family: 'Inter';font-weight: 400;font-size: 16px;" Class="text-white">For <b>Entertainment Employers</b></MudText>
+<MudGrid Style="background-image: url('Images/Rectangle 14.png'); background-color:#070D21" Justify="Justify.Center" Class="mt-3">
+	<MudItem xs="11">
+		<MudGrid>
+			<MudItem xs="6" Class="mt-10 mb-16">
+				<MudText Style="font-family: 'Oswald';font-weight: 400;font-size: 61px;" Class="text-white">ENTERTAINMENT<br />JOBS & INTERNSHIPS</MudText>
+				<MudText Style="font-family: 'Inter';font-weight: 400;font-size: 20px;" Class="text-white">23 years of helpeding people start and build their Entertainment and Digital Media careers.</MudText>
+				<MudGrid Justify="Justify.Center">
+					<MudItem xs="6" Class="text-center">
+						<MudButton Href="/category" Size="Size.Large" Style="background-color: #B7DF38; color: #0D3255; width: 268px; height: 69px;" Class="mt-13" Variant=" Variant.Filled">Browse Jobs</MudButton>
+						<MudText Style="font-family: 'Inter';font-weight: 400;font-size: 16px;" Align="Align.Left" Class="text-white text-center"><b>12,973</b> Active Entertainment Jobs</MudText>
+					</MudItem>
+					<MudItem xs="6" Class="text-center">
+						<MudButton Href="/postjob" Size="Size.Large" Style="background-color: #136BBE; color: #FFFFFF; width: 268px; height: 69px;" Class="mt-13" Variant="Variant.Filled">Post a Job</MudButton>
+						<MudText Style="font-family: 'Inter';font-weight: 400;font-size: 16px;" Class="text-white">For <b>Entertainment Employers</b></MudText>
+					</MudItem>
+				</MudGrid>
+			</MudItem>
+			<MudItem xs="1"></MudItem>
+			<MudItem xs="5" Class="text-center mt-10 mb-16">
+				<MudItem xs="12" Class="mt-5">
+					<MudText Style="font-family: 'Inter';font-weight: 700;font-size: 14px; letter-spacing: 0.38em;" Align="Align.Left" Class="text-white">MOST-VETTED EMPLOYERS:</MudText>
+				</MudItem>
+				<MudItem xs="12" Class="mt-10" >
+					<MudGrid>
+						<MudItem xs="3">
+							<MudImage Src="Images/5.png" Class="mt-1" Fluid="true" />
+						</MudItem>
+						<MudItem xs="3">
+							<MudImage Src="Images/3.png" Class="mt-1" Fluid="true" />
+						</MudItem>
+						<MudItem xs="3">
+							<MudImage Src="Images/2.png" Class="mt-3" Fluid="true" />
+						</MudItem>
+						<MudItem xs="3">
+							<MudImage Src="Images/6.png" Fluid="true" />
+						</MudItem>
+					</MudGrid>
+				</MudItem>
+				<MudItem xs="12" Class="mt-10" >
+					<MudGrid>
+						<MudItem xs="3">
+							<MudImage Src="Images/7.png" Class="mt-2" Fluid="true" />
+						</MudItem>
+						<MudItem xs="3">
+							<MudImage Src="Images/8.png" Fluid="true" />
+						</MudItem>
+						<MudItem xs="3">
+							<MudImage Src="Images/1.png" Class="mt-1" Fluid="true"/>
+						</MudItem>
+						<MudItem xs="3">
+							<MudImage Src="Images/4.png" Class="mt-5" Fluid="true" />
+						</MudItem>
+					</MudGrid>
+				</MudItem>
 			</MudItem>
 		</MudGrid>
-	</MudItem>
-	<MudItem xs="5" Class="mt-10 mb-16">
-		<MudText Style="font-family: 'Inter';font-weight: 700;font-size: 14px; letter-spacing: 0.38em;" Align="Align.Left" Class="text-white">most-vetted employers:</MudText>
-		<MudImage Class="mt-10 mr-4" Src="Images/1.png" Height="40" Width="90" />
-		<MudImage Class="mt-10 mr-4" Src="Images/2.png" Height="60" Width="90" />
-		<MudImage Class="mt-10 mr-4" Src="Images/3.png" Height="40" Width="90" />
-		<MudImage Class="mt-10 mr-4" Src="Images/4.png" Height="40" Width="90" />
-		<MudImage Class="mt-10 mr-4" Src="Images/5.png" Height="40" Width="90" />
-		<MudImage Class="mt-10 mr-4" Src="Images/6.png" Height="40" Width="90" />
-		<MudImage Class="mt-10 mr-4" Src="Images/7.png" Height="40" Width="90" />
-		<MudImage Class="mt-10 mr-4" Src="Images/8.png" Height="40" Width="90" />
 	</MudItem>
 </MudGrid>
 <MudGrid Style="background-color:#EEF5F8" Class="mt-3" Justify="Justify.Center">
@@ -124,3 +157,23 @@
 		</MudItem>
 	</MudGrid>
 </MudGrid>
+
+
+
+
+@code{
+	[Parameter]
+	public bool isloggedout { get; set; }
+
+	protected override void OnInitialized()
+	{
+		if(isloggedout == true)
+		{
+			snackBar.Add("Logged Out Successfully...!", Severity.Success);
+		}
+		else
+		{
+			isloggedout = false;
+		}
+    }
+}

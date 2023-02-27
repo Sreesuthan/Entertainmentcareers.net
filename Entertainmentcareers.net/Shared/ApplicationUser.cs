@@ -14,10 +14,10 @@ namespace Entertainmentcareers.net.Shared
         public string Email { get; set; } = string.Empty;
         public byte[] PasswordHash { get; set; } = new byte[32];
         public byte[] PasswordSalt { get; set; } = new byte[32];
-        public string? ConfirmationToken { get; set; }
+        public string ConfirmationToken { get; set; } = string.Empty;
         public DateTime? ConfirmedAt { get; set; }
         public bool IsConfirmed { get; set; }
-        public string? PasswordResetToken { get; set; }
+        public string PasswordResetToken { get; set; } = string.Empty;
         public DateTime? ResetTokenExpires { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;

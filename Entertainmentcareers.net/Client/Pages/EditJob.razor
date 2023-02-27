@@ -330,7 +330,7 @@
                     </MudCardContent>
                     <MudCardActions>
                         <MudItem xs="11" Class="d-flex justify-center">
-                            <MudButton ButtonType="ButtonType.Submit" Size="Size.Large" Style="background-color: #689F38; color: #FFFFFF;" Class="mb-4" Variant=" Variant.Filled">Preview</MudButton>
+                                <MudButton ButtonType="ButtonType.Submit" Size="Size.Large" Style="background-color: #B7DF38; color: #0D3255;" Class="mb-4" Variant=" Variant.Filled">Preview</MudButton>
                         </MudItem>
                     </MudCardActions>
                 </MudCard>
@@ -412,7 +412,7 @@
                 <MudGrid Justify="Justify.Center">
                     <MudItem xs="10">
                     <MudItem xs="12">
-                            <MudButton OnClick="()=>Submit()" Style="background-color: #689F38; color: #FFFFFF;" Variant=" Variant.Filled">Submit</MudButton>
+                                    <MudButton OnClick="()=>Submit()" Style="background-color: #B7DF38; color: #0D3255;" Variant=" Variant.Filled">Submit</MudButton>
                     </MudItem>
                     <MudItem xs="12">
                                     <MudChip OnClick="()=>Edit()"><b>Go Back</b></MudChip>
@@ -480,7 +480,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if(Id != null)
+        if(Id != 0)
         {
             job = await JobService.GetSingleJob((int)Id);
             if (job.EmploymentType == "Job")

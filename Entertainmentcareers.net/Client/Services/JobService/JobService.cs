@@ -21,7 +21,7 @@ namespace Entertainmentcareers.net.Client.Services.JobService
             var result = await _http.PostAsJsonAsync("api/Job", job);
             var response = await result.Content.ReadFromJsonAsync<List<Job>>();
             jobs = response;
-            _navigationManager.NavigateTo($"postjob");
+            _navigationManager.NavigateTo("postjob");
         }
 
         public async Task<Job> GetSingleJob(int id)
@@ -43,7 +43,7 @@ namespace Entertainmentcareers.net.Client.Services.JobService
             var result = await _http.PutAsJsonAsync("api/Job", job);
             var response = await result.Content.ReadFromJsonAsync<List<Job>>();
             jobs = response;
-            _navigationManager.NavigateTo($"Joblist"); 
+            _navigationManager.NavigateTo("Joblist"); 
         }
     }
 }

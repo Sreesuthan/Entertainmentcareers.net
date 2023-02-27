@@ -13,14 +13,17 @@
                 <EditForm Model="verify" OnValidSubmit="HandleSubmit">
                 <DataAnnotationsValidator />
                 <MudGrid Class="mb-2" Spacing="1">
-                    <MudItem xs="12">
-                            <MudText Typo="Typo.h4" Class="mb-2 border-bottom" Style="font-family: 'Inter';font-weight: 700; color:#08243D;">Resend Confirmation Email</MudText>
-                    </MudItem>
-                    <MudItem xs="6">
+                        <MudItem xs="12" Style="background-color:#EEF5F8" Class="border-bottom">
+                            <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;"><b>Resend Confirmation Email</b></MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2 mt-2"><b>Enter email for resend confirmation email</b></MudText>
+                        </MudItem>
+                    <MudItem xs="11">
                             <MudTextField Label="Email" @bind-Value="verify.Email" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>verify.Email)"></MudTextField>
                     </MudItem>
                     <MudItem xs="12">
-                        <MudFab Size="Size.Medium" ButtonType="ButtonType.Submit" Style="background-color: #689F38; color: #FFFFFF; text-transform:none;" Class="mt-4" Label="&nbsp;&nbsp;Submit&nbsp;&nbsp;" />
+                            <MudFab Size="Size.Medium" ButtonType="ButtonType.Submit" Style="background-color: #B7DF38; color: #0D3255; text-transform:none;" Label="&nbsp;&nbsp;Submit&nbsp;&nbsp;" />
                     </MudItem>
                     </MudGrid>
                 </EditForm>

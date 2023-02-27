@@ -29,16 +29,18 @@ namespace Entertainmentcareers.net.Server.Controllers
     {
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
 
-        public ApplicationUserController(DataContext context, IConfiguration configuration)
+        public ApplicationUserController(DataContext context, IConfiguration configuration, IWebHostEnvironment env)
         {
             StripeConfiguration.ApiKey = "sk_test_51M6VuGSEVEH46znALqeCQfXrgUc0MGnhBdKS7ewLLvQCFszM7zlwm325krHsNNPI8QTxEXhohUzhC7K3Fsm76LLZ00sQ5cdMKf";
             _context = context;
             _configuration = configuration;
+            _env = env;
         }
 
         [HttpPost("emailcheck")]
-        public async Task<ActionResult<string>> EmailCheck(SignUp request)
+        public async Task<ActionResult<string>> EmailCheck(SignUpPayment request)
         {
             if (_context.Members.Any(u => u.Email == request.Email))
             {
@@ -72,7 +74,7 @@ namespace Entertainmentcareers.net.Server.Controllers
 
             token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-            String link = $"https://localhost:7119/ConfirmEmail/{token}";
+            string link = $"https://localhost:7119/ConfirmEmail/{token}";
             SendEmail(link, request.Email);
 
             _context.Members.Add(member);
@@ -115,18 +117,17 @@ namespace Entertainmentcareers.net.Server.Controllers
 
             string token = user.ConfirmationToken;
             token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
-
-            String link = $"https://localhost:7119/ConfirmEmail/{token}";
+            string link = $"https://localhost:7119/ConfirmEmail/{token}";
             SendEmail(link, email.Email);
 
             return Ok(); 
         }
 
         [HttpPost("verify")]
-        public async Task<IActionResult> Verify(string token)
+        public async Task<IActionResult> Verify(Entertainmentcareers.net.Shared.Token token)
         {
-            String _token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
-            var user = await _context.Members.FirstOrDefaultAsync(u => u.ConfirmationToken == _token);
+            string _code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token.VerificationToken));
+            var user = await _context.Members.FirstOrDefaultAsync(u => u.ConfirmationToken == _code);
             if (user == null)
             {
                 return BadRequest("Invalid token.");
@@ -175,7 +176,7 @@ namespace Entertainmentcareers.net.Server.Controllers
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            user.PasswordResetToken = null;
+            user.PasswordResetToken = string.Empty;
             user.ResetTokenExpires = null;
 
             await _context.SaveChangesAsync();
@@ -200,7 +201,7 @@ namespace Entertainmentcareers.net.Server.Controllers
         }
 
         [HttpPost("checkout")]
-        public ActionResult CreateCheckoutSession(SignUp signUp)
+        public ActionResult CreateCheckoutSession(SignUpPayment payment)
         {
             var lineItems = new List<SessionLineItemOptions>
             {
@@ -208,21 +209,26 @@ namespace Entertainmentcareers.net.Server.Controllers
                 {
                     PriceData = new SessionLineItemPriceDataOptions
                     {
-                        UnitAmountDecimal = signUp.PlanPrice * 100,
+                        UnitAmountDecimal = payment.PlanPrice * 100,
                         Currency = "inr",
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
-                            Name = signUp.PlanType,
+                            Name = payment.PlanType,
                         },
                     },
                     Quantity = 1,
                 },
             };
+            var email = payment.Email;
+            email = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(email));
+            var password = payment.Password;
+            password = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(password));
+
             var options = new SessionCreateOptions
             {
                 LineItems = lineItems,
                 Mode = "payment",
-                SuccessUrl = "https://localhost:7119/signin",
+                SuccessUrl = $"https://localhost:7119/signup/{email}/{password}",
                 CancelUrl = "https://localhost:7119/signup",
             };
 
@@ -282,13 +288,13 @@ namespace Entertainmentcareers.net.Server.Controllers
             return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
         }
 
-        void SendEmail(string? body, string Email)
+        private void SendEmail(string body, string Email)
         {
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(_configuration.GetSection("EmailUsername").Value));
             email.To.Add(MailboxAddress.Parse(Email));
             email.Subject = "Confirm your Email";
-            email.Body = new TextPart(TextFormat.Text) { Text = body };
+            email.Body = new TextPart(TextFormat.Html) { Text = CreateBody(body) };
 
             using var smtp = new SmtpClient();
             smtp.Connect(_configuration.GetSection("EmailHost").Value, 587, SecureSocketOptions.StartTls);
@@ -297,19 +303,33 @@ namespace Entertainmentcareers.net.Server.Controllers
             smtp.Disconnect(true);
         }
 
-        void SendEmail1(string? body, string Email)
+        private string CreateBody(string body)
+        {
+            var newBody = System.IO.File.ReadAllText(Path.Combine(_env.ContentRootPath, "EmailBody", "ConfirmEmail.html"));
+            newBody = newBody.Replace("{link}", body);
+            return newBody;
+        }
+
+        private void SendEmail1(string body, string Email)
         {
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(_configuration.GetSection("EmailUsername").Value));
             email.To.Add(MailboxAddress.Parse(Email));
             email.Subject = "Reset your password";
-            email.Body = new TextPart(TextFormat.Text) { Text = body };
+            email.Body = new TextPart(TextFormat.Html) { Text = CreateBody1(body) };
 
             using var smtp = new SmtpClient();
             smtp.Connect(_configuration.GetSection("EmailHost").Value, 587, SecureSocketOptions.StartTls);
             smtp.Authenticate(_configuration.GetSection("EmailUsername").Value, _configuration.GetSection("EmailPassword").Value);
             smtp.Send(email);
             smtp.Disconnect(true);
+        }
+
+        private string CreateBody1(string body)
+        {
+            var newBody = System.IO.File.ReadAllText(Path.Combine(_env.ContentRootPath, "EmailBody", "ResetPassword.html"));
+            newBody = newBody.Replace("{link}", body);
+            return newBody;
         }
     }
 }

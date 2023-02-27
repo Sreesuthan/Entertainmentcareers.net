@@ -15,5 +15,6 @@ namespace Entertainmentcareers.net.Server.Data
         public DbSet<Categories> Categories { get; set; }
         public DbSet<EmploymentTypes> EmploymentTypes { get; set; }
         public DbSet<Companies> Companies { get; set; }
+        public DbSet<Alert> AlertSubscribers { get; set; }
     }
 }

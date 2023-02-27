@@ -1,72 +1,133 @@
 ﻿@layout JobSeekerLayout
 @page "/jobalert"
+@page "/alertconfirmedmessage/{email}"
+@inject HttpClient Http
+@inject MudBlazor.ISnackbar snackBar
+@inject NavigationManager navigationManager
 
 <MudGrid Justify="Justify.Center" Class="mt-8 mb-8">
     <MudItem xs="8">
         <MudGrid Justify="Justify.Center" Class="border">
-        <MudItem xs="12">
-            <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="pb-2">Weekly Job Alert</MudText>
-            <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2"><b>Subscribe to our weekly job alert</b></MudText>
-            <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2 mt-4">
-                Weekly Job Alert is sent each Tuesday containing all the new jobs (or internships) posted on the site in the previous week.
-                We respect your privacy and do not share this information with anyone, ever. You can safely unsubscribe any time.
-            </MudText>
-            <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2 mt-4"><b>Daily Alerts & early access</b></MudText>
-                <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2">For customized daily alerts and early access to the jobs, look at our <a href="/membersfeatures" style="font-family: 'Inter'; color:#08243D; text-decoration: underline solid #08243D 1px;">Membership</a></MudText>
-            <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2 mt-4">
-                The security of your personal information is of paramount importance to us. We hire outside companies to test our security on a daily basis.
-            </MudText>
-        </MudItem>
-        <MudItem xs="12">
-            <EditForm Model="alert" OnValidSubmit="HandleSubmit">
-                <DataAnnotationsValidator />
-            <MudGrid Class="mb-2"Spacing="1">
-                        <MudItem xs="3" Class="mt-2">
-                            <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Name *</MudText>
-                        </MudItem>
-                    <MudItem xs="8">
-                            <MudTextField Label="Name" Class="mt-2" @bind-Value="alert.Name" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>alert.Name)"></MudTextField>
-                    </MudItem>
-                    <MudItem xs="3" Class="mt-2">
-                            <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Email *</MudText>
-                    </MudItem>
-                    <MudItem xs="8">
-                            <MudTextField Label="Email" Class="mt-2" @bind-Value="alert.Email" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>alert.Email)"></MudTextField>
-                    </MudItem>
-                    <MudItem xs="3" Class="mt-2">
-                            <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Confirm Email *</MudText>
-                    </MudItem>
-                    <MudItem xs="8">
-                            <MudTextField Label="Confirm Email" Class="mt-2" @bind-Value="alert.ConfirmEmail" Required="true" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>alert.ConfirmEmail)"></MudTextField>
-                    </MudItem>
-                        <MudItem xs="3" Class="mt-2">
-                            <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Zip *</MudText>
-                        </MudItem>
-                    <MudItem xs="4">
-                            <MudTextField Label="Zip" Class="mt-2" @bind-Value="alert.Zip" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>alert.Zip)"></MudTextField>
-                    </MudItem>
-                        <MudItem xs="4"></MudItem>
-                    <MudItem xs="3" Class="mt-2">
-                            <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Choose A Newsletter *</MudText>
-                    </MudItem>
-                    <MudItem xs="4">
-                            <MudCheckBox Size="Size.Small" @bind-Checked="alert.NewsLetterJob" Style="font-family: 'Inter'; color:#08243D;" Label="Newsletter - Job Listings" Color="Color.Primary"></MudCheckBox>
-                            <MudCheckBox Size="Size.Small" @bind-Checked="alert.NewsLetterIntership" Style="font-family: 'Inter'; color:#08243D;" Label="Newsletter - Internships" Color="Color.Primary"></MudCheckBox>
+            @{
+                if (IsSend == false && IsConfirmed == false)
+                {
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="pb-2">Weekly Job Alert</MudText>
+                        <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2"><b>Subscribe to our weekly job alert</b></MudText>
+                        <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2 mt-4">
+                            Weekly Job Alert is sent each Tuesday containing all the new jobs (or internships) posted on the site in the previous week.
+                            We respect your privacy and do not share this information with anyone, ever. You can safely unsubscribe any time.
+                        </MudText>
+                        <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2 mt-4"><b>Daily Alerts & early access</b></MudText>
+                        <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2">For customized daily alerts and early access to the jobs, look at our <a href="/membersfeatures" style="font-family: 'Inter'; color:#08243D; text-decoration: underline solid #08243D 1px;">Membership</a></MudText>
+                        <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2 mt-4">
+                            The security of your personal information is of paramount importance to us. We hire outside companies to test our security on a daily basis.
+                        </MudText>
                     </MudItem>
                     <MudItem xs="12">
-                        <MudFab Size="Size.Medium" ButtonType="ButtonType.Submit" Style="background-color: #689F38; color: #FFFFFF; text-transform:none;" Label="&nbsp;&nbsp;Subscribe&nbsp;&nbsp;" />
-                        </MudItem>
-                    </MudGrid>
-                </EditForm>
-        </MudItem>
+                        <EditForm Model="alert" OnValidSubmit="HandleSubmit">
+                            <DataAnnotationsValidator />
+                            <MudGrid Class="mb-2" Spacing="1">
+                                <MudItem xs="3" Class="mt-2">
+                                    <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Name *</MudText>
+                                </MudItem>
+                                <MudItem xs="8">
+                                    <MudTextField Label="Name" Class="mt-2" @bind-Value="alert.Name" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>alert.Name)"></MudTextField>
+                                </MudItem>
+                                <MudItem xs="3" Class="mt-2">
+                                    <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Email *</MudText>
+                                </MudItem>
+                                <MudItem xs="8">
+                                    <MudTextField Label="Email" Class="mt-2" @bind-Value="alert.Email" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>alert.Email)"></MudTextField>
+                                </MudItem>
+                                <MudItem xs="3" Class="mt-2">
+                                    <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Confirm Email *</MudText>
+                                </MudItem>
+                                <MudItem xs="8">
+                                    <MudTextField Label="Confirm Email" Class="mt-2" @bind-Value="alert.ConfirmEmail" Required="true" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>alert.ConfirmEmail)"></MudTextField>
+                                </MudItem>
+                                <MudItem xs="3" Class="mt-2">
+                                    <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Zip *</MudText>
+                                </MudItem>
+                                <MudItem xs="4">
+                                    <MudTextField Label="Zip" Class="mt-2" @bind-Value="alert.Zip" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>alert.Zip)"></MudTextField>
+                                </MudItem>
+                                <MudItem xs="4"></MudItem>
+                                <MudItem xs="3" Class="mt-2">
+                                    <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Choose A Newsletter *</MudText>
+                                </MudItem>
+                                <MudItem xs="4">
+                                    <MudCheckBox Size="Size.Small" @bind-Checked="alert.NewsLetterJob" Style="font-family: 'Inter'; color:#08243D;" Label="Newsletter - Job Listings" Color="Color.Primary"></MudCheckBox>
+                                    <MudCheckBox Size="Size.Small" @bind-Checked="alert.NewsLetterIntership" Style="font-family: 'Inter'; color:#08243D;" Label="Newsletter - Internships" Color="Color.Primary"></MudCheckBox>
+                                </MudItem>
+                                <MudItem xs="12">
+                                    <MudFab Size="Size.Medium" ButtonType="ButtonType.Submit" Style="background-color: #B7DF38; color: #0D3255; text-transform:none;" Label="&nbsp;&nbsp;Subscribe&nbsp;&nbsp;" />
+                                </MudItem>
+                            </MudGrid>
+                        </EditForm>
+                    </MudItem>
+                }
+                else if (IsSend == false && IsConfirmed == true)
+                {
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="pb-2">Weekly Job Alert</MudText>
+                        <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2">
+                            You have been subscribed to the @(alert.NewsLetterJob == true ? "Newsletter - Jobs" : "") @(alert.NewsLetterJob == true && alert.NewsLetterIntership == true ? "and" : "") @(alert.NewsLetterIntership == true ? "Newsletter - Internships newsletter" : "") list(s) as @alert.Email.<br />To unsubscribe, please use the link near the end of each newsletter.
+                        </MudText>
+                    </MudItem>
+                }
+                else
+                {
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="pb-2">Weekly Job Alert</MudText>
+                        <MudText Typo="Typo.h6" Style="font-family: 'Inter'; color:#08243D;" Class="pb-2"><b>Yeah! - Not done quite yet. Go to your email and click on the confirmation link.</b></MudText>
+                            <MudAlert Severity="Severity.Success" Dense="true">We have emailed a confirmation to @alert.Email. Once you receive this message, click the link to complete your subscription.</MudAlert>
+                    </MudItem>
+                }
+            }
         </MudGrid>
     </MudItem>
 </MudGrid>
 
 
 @code {
-    Alert alert = new Alert();
+    [Parameter]
+    public string email { get; set; } = string.Empty;
 
-    void HandleSubmit()
-    {}
+    Alert alert = new Alert();
+    private bool IsSend = false;
+    public bool IsConfirmed = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (email != null)
+        {
+            IsConfirmed = true;
+            var _email = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(email));
+            var result = await Http.GetFromJsonAsync<Alert>($"api/Alert/{_email}");
+            if (result != null)
+            {
+                alert = result;
+            }
+        }
+        else
+        {
+            alert = new();
+            IsConfirmed = false;
+        }
+    }
+
+    private async Task HandleSubmit()
+    {
+        var result = await Http.PostAsJsonAsync("api/Alert", alert);
+        if(result.IsSuccessStatusCode)
+        {
+            navigationManager.NavigateTo("jobalert");
+            IsSend = true;
+        }
+        else
+        {
+            navigationManager.NavigateTo("jobalert");
+        }
+    }
 }

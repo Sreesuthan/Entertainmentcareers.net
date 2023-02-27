@@ -205,8 +205,8 @@
         {
             await LocalStorage.RemoveItemAsync("token");
             await AuthStateProvider.GetAuthenticationStateAsync();
-            snackBar.Add("Logged Out Successfully...!", Severity.Success);
-            navigationManager.NavigateTo("/");
+            var IsLoggedOut = true;
+            navigationManager.NavigateTo($"/{IsLoggedOut}", true);
         }
     }
 }

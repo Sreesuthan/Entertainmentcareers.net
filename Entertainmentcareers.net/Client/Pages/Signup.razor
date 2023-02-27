@@ -1,5 +1,6 @@
 ﻿@layout MembershipLayout
 @page "/signup"
+@page "/signup/{email}/{password}"
 @using Entertainmentcareers.net.Shared;
 @using System.ComponentModel.DataAnnotations;
 @inject HttpClient Http
@@ -10,155 +11,195 @@
 <MudGrid Justify="Justify.Center" Class="mt-8 mb-8">
     <MudItem xs="10">
         <MudGrid>
-            <MudItem xs="8">
-                <EditForm Model="signUp" OnValidSubmit="HandleSubmit">
-                <DataAnnotationsValidator />
-                <MudGrid Class="mb-2" Spacing="1">
-                    <MudItem xs="12">
-                            <MudText Typo="Typo.h4" Class="mb-2" Style="font-family: 'Inter';font-weight: 700; color:#08243D;">Membership Sign Up</MudText>
-                    </MudItem>
-                    <MudItem xs="12">
-                        <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;"><b>Step 1.</b></MudText>
-                    </MudItem>
-                    <MudItem xs="12">
-                        <MudRadioGroup Required="true" @bind-SelectedOption="signUp.PlanType">
-                            <MudRadio Size="Size.Small" Option="@("Monthly")"><MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;">Monthly <MudIcon Icon="@Icons.Material.Filled.Star" Size="Size.Small" Style="color:#08243D;" /><b>Special Special - Discount on first month</b> $4.95 First Month <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;">(normally $9.95)<br />After the first month, the Monthly Membership automatically renews at $9.95. <br />each month until you cancel the renewal. You can cancel the renewal at any time online.</MudText></MudText></MudRadio>
-                            <br />
-                            <MudRadio Size="Size.Small" Option="@("3 Months")"><MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;">3 Months - $25.00 <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;">(normally $29.85)</MudText></MudText></MudRadio>
-                            <br />
-                            <MudRadio Size="Size.Small" Option="@("6 Months")"><MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;">6 Months - $45.00 <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;">(normally $59.70)</MudText></MudText></MudRadio>
-                            <br />
-                            <MudRadio Size="Size.Small" Option="@("12 Months")"><MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;">12 Months - $70.00 <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;">(normally $119.40)</MudText></MudText></MudRadio>
-                        </MudRadioGroup>
-                    </MudItem>
-                    <MudItem xs="12">
-                        <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;"><b>Step 2.</b></MudText>
-                    </MudItem>
-
-                        @{
-                            if (Error.Length > 0)
-                            {
-                                    <MudItem xs="8">
-                                    <MudAlert Severity="Severity.Error" Dense="true">@Error</MudAlert>
-                                    </MudItem>
-                            }
-                        }
+            @{
+                if(status == true)
+                {
                     <MudItem xs="8">
-                        <MudTextField Label="Email Address" @bind-Value="signUp.Email" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.Email)" HelperText="(this will be your login id)"></MudTextField>
-                    </MudItem>
-                        <MudItem xs="1">
-                            <MudTooltip Placement="Placement.Top" Text="Please enter valid email address only.">
-                                <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                            </MudTooltip>
-                        </MudItem>
-                    <MudItem xs="8">
-                            <MudTextField Label="Password" @bind-Value="signUp.Password" Required="true" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>signUp.Password)" HelperText="(Min. 6 characters, digit (0-9), uppercase(A-Z) and special character.)" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowPassword" AdornmentAriaLabel="Show Password" ></MudTextField>
-                    </MudItem>
-                    <MudItem xs="1">
-                        <MudTooltip Placement="Placement.Top" Text="Password must contains 6 characters, digit (0-9), uppercase(A-Z) and special character.">
-                            <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                        </MudTooltip>
-                    </MudItem>
-                        <MudItem xs="12">
-                            <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;"><b>Step 3.</b> 
-                                <MudTooltip Placement="Placement.Top">
-                                    <ChildContent>
-                                        <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                    </ChildContent>
-                                    <TooltipContent>
-                                        <MudText Typo="Typo.caption">Enter member information. If you are not a U.S. resident,<br/>please contact support@entertainmentcareers.net.</MudText>
-                                    </TooltipContent>
-                                </MudTooltip>
-                            </MudText>
-                        </MudItem>
-                        <MudItem xs="12">
-                            <MudText Typo="Typo.body1" Style="font-family: 'Inter';font-weight: 700; color:#08243D;">Member Name</MudText>
-                        </MudItem>
-                        <MudItem xs="4">
-                            <MudTextField Label="First Name" @bind-Value="signUp.FirstName" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.FirstName)"></MudTextField>
-                        </MudItem>
-                        <MudItem xs="4">
-                            <MudTextField Label="Last Name" @bind-Value="signUp.LastName" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.LastName)"></MudTextField>
-                        </MudItem>
-                        <MudItem xs="12">
-                            <MudText Typo="Typo.body1" Style="font-family: 'Inter';font-weight: 700; color:#08243D;">Billing Address</MudText>
-                        </MudItem>
-                        <MudItem xs="8">
-                            <MudTextField Label="Street" @bind-Value="signUp.Street" Required="true" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>signUp.Street)"></MudTextField>
-                        </MudItem>
-                        <MudItem xs="4"></MudItem>
-                        <MudItem xs="4">
-                            <MudTextField Label="City" @bind-Value="signUp.City" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.City)"></MudTextField>
-                        </MudItem>
-                        <MudItem xs="2">
-                            <MudTextField Label="State" @bind-Value="signUp.State" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.State)"></MudTextField>
-                        </MudItem>
-                        <MudItem xs="2">
-                            <MudTextField Label="Zip" @bind-Value="signUp.Zip" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.Zip)"></MudTextField>
-                        </MudItem>@*
-                        <MudItem xs="12">
-                            <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" Class="mb-2"><b>Step 4.</b></MudText>
-                        </MudItem>
-                        <MudItem xs="12">
-                            <MudGrid Style="background-color:#CCFF90;" Class="mb-2">
-                            <MudItem xs="12">
-                                <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;"><b>Secured Credit Card Payment</b></MudText>
-                            </MudItem>
+                        <EditForm Model="signUp" OnValidSubmit="HandleSubmit2">
+                            <DataAnnotationsValidator />
+                            <MudGrid Class="mb-2" Spacing="1">
                                 <MudItem xs="12">
-                                    <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;"><MudIcon Icon="@Icons.Material.Filled.Lock" Size="Size.Small" Style="color:#08243D;" /> This is a secure 256-bit encrypted payment.</MudText>
+                                    <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;"><b>Step 1.</b></MudText>
                                 </MudItem>
                                 <MudItem xs="8">
-                                    <MudTextField Label="Credit Card" @bind-Value="signUp.CreditCard" Style="background-color:#FFFFFF;" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.CreditCard)"></MudTextField>
+                                    <MudTextField Label="Email Address" @bind-Value="signUp.Email" Margin="Margin.Dense" Disabled="true" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.Email)" HelperText="(this will be your login id)"></MudTextField>
+                                </MudItem>
+                                <MudItem xs="1">
+                                    <MudTooltip Placement="Placement.Top" Text="Please enter valid email address only.">
+                                        <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                                    </MudTooltip>
+                                </MudItem>
+                                <MudItem xs="8">
+                                    <MudTextField Label="Password" @bind-Value="signUp.Password" Required="true" Margin="Margin.Dense" Disabled="true" Variant="Variant.Outlined" For="@(()=>signUp.Password)" HelperText="(Min. 6 characters, digit (0-9), uppercase(A-Z) and special character.)" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowPassword" AdornmentAriaLabel="Show Password"></MudTextField>
+                                </MudItem>
+                                <MudItem xs="1">
+                                    <MudTooltip Placement="Placement.Top" Text="Password must contains 6 characters, digit (0-9), uppercase(A-Z) and special character.">
+                                        <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                                    </MudTooltip>
+                                </MudItem>
+                                <MudItem xs="12">
+                                    <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;">
+                                        <b>Step 2.</b>
+                                        <MudTooltip Placement="Placement.Top">
+                                            <ChildContent>
+                                                <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                                            </ChildContent>
+                                            <TooltipContent>
+                                                <MudText Typo="Typo.caption">Enter member information. If you are not a U.S. resident,<br />please contact support@entertainmentcareers.net.</MudText>
+                                            </TooltipContent>
+                                        </MudTooltip>
+                                    </MudText>
+                                </MudItem>
+                                <MudItem xs="12">
+                                    <MudText Typo="Typo.body1" Style="font-family: 'Inter';font-weight: 700; color:#08243D;">Member Name</MudText>
+                                </MudItem>
+                                <MudItem xs="4">
+                                    <MudTextField Label="First Name" @bind-Value="signUp.FirstName" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.FirstName)"></MudTextField>
+                                </MudItem>
+                                <MudItem xs="4">
+                                    <MudTextField Label="Last Name" @bind-Value="signUp.LastName" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.LastName)"></MudTextField>
+                                </MudItem>
+                                <MudItem xs="12">
+                                    <MudText Typo="Typo.body1" Style="font-family: 'Inter';font-weight: 700; color:#08243D;">Billing Address</MudText>
+                                </MudItem>
+                                <MudItem xs="8">
+                                    <MudTextField Label="Street" @bind-Value="signUp.Street" Required="true" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>signUp.Street)"></MudTextField>
                                 </MudItem>
                                 <MudItem xs="4"></MudItem>
                                 <MudItem xs="4">
-                                    <MudSelect Label="Month" T="string" Margin="Margin.Dense" Style="background-color:#FFFFFF;" Required="true" Variant="Variant.Outlined" @bind-Value="signUp.Month">
-                                        <MudSelectItem Value="@("01")" />
-                                        <MudSelectItem Value="@("02")" />
-                                        <MudSelectItem Value="@("03")" />
-                                        <MudSelectItem Value="@("04")" />
-                                        <MudSelectItem Value="@("05")" />
-                                        <MudSelectItem Value="@("06")" />
-                                        <MudSelectItem Value="@("07")" />
-                                        <MudSelectItem Value="@("08")" />
-                                        <MudSelectItem Value="@("09")" />
-                                        <MudSelectItem Value="@("10")" />
-                                        <MudSelectItem Value="@("11")" />
-                                        <MudSelectItem Value="@("12")" />
-                                    </MudSelect>
+                                    <MudTextField Label="City" @bind-Value="signUp.City" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.City)"></MudTextField>
                                 </MudItem>
-                                <MudItem xs="4">
-                                    <MudSelect Label="Year" T="string" Margin="Margin.Dense" Style="background-color:#FFFFFF;" Required="true" Variant="Variant.Outlined" @bind-Value="signUp.Year">
-                                        <MudSelectItem Value="@("2023")" />
-                                        <MudSelectItem Value="@("2024")" />
-                                        <MudSelectItem Value="@("2025")" />
-                                        <MudSelectItem Value="@("2026")" />
-                                        <MudSelectItem Value="@("2027")" />
-                                        <MudSelectItem Value="@("2028")" />
-                                        <MudSelectItem Value="@("2029")" />
-                                        <MudSelectItem Value="@("2030")" />
-                                        <MudSelectItem Value="@("2031")" />
-                                        <MudSelectItem Value="@("2032")" />
-                                    </MudSelect>
+                                <MudItem xs="2">
+                                    <MudTextField Label="State" @bind-Value="signUp.State" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.State)"></MudTextField>
                                 </MudItem>
-                                <MudItem xs="12">
-                                    <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;">You must review and accept the Terms and Conditions before subscribing.</MudText>
-                                    <MudCheckBox @bind-Checked="signUp.CheckBox" Label=" I agree and accept." Style="font-family: 'Inter'; color:#08243D;"></MudCheckBox>
-                                </MudItem>
-                            </MudGrid>
-                        </MudItem>*@
+                                <MudItem xs="2">
+                                    <MudTextField Label="Zip" @bind-Value="signUp.Zip" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.Zip)"></MudTextField>
+                                </MudItem>@*
                         <MudItem xs="12">
-                            <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;"><b>How Did You Find Us? (optional)</b></MudText>
+                        <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" Class="mb-2"><b>Step 4.</b></MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                        <MudGrid Style="background-color:#CCFF90;" Class="mb-2">
+                        <MudItem xs="12">
+                        <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;"><b>Secured Credit Card Payment</b></MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                        <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;"><MudIcon Icon="@Icons.Material.Filled.Lock" Size="Size.Small" Style="color:#08243D;" /> This is a secure 256-bit encrypted payment.</MudText>
                         </MudItem>
                         <MudItem xs="8">
-                            <MudTextField @bind-Value="signUp.About" Lines="4" Variant="Variant.Outlined"></MudTextField>
+                        <MudTextField Label="Credit Card" @bind-Value="signUp.CreditCard" Style="background-color:#FFFFFF;" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>signUp.CreditCard)"></MudTextField>
+                        </MudItem>
+                        <MudItem xs="4"></MudItem>
+                        <MudItem xs="4">
+                        <MudSelect Label="Month" T="string" Margin="Margin.Dense" Style="background-color:#FFFFFF;" Required="true" Variant="Variant.Outlined" @bind-Value="signUp.Month">
+                        <MudSelectItem Value="@("01")" />
+                        <MudSelectItem Value="@("02")" />
+                        <MudSelectItem Value="@("03")" />
+                        <MudSelectItem Value="@("04")" />
+                        <MudSelectItem Value="@("05")" />
+                        <MudSelectItem Value="@("06")" />
+                        <MudSelectItem Value="@("07")" />
+                        <MudSelectItem Value="@("08")" />
+                        <MudSelectItem Value="@("09")" />
+                        <MudSelectItem Value="@("10")" />
+                        <MudSelectItem Value="@("11")" />
+                        <MudSelectItem Value="@("12")" />
+                        </MudSelect>
+                        </MudItem>
+                        <MudItem xs="4">
+                        <MudSelect Label="Year" T="string" Margin="Margin.Dense" Style="background-color:#FFFFFF;" Required="true" Variant="Variant.Outlined" @bind-Value="signUp.Year">
+                        <MudSelectItem Value="@("2023")" />
+                        <MudSelectItem Value="@("2024")" />
+                        <MudSelectItem Value="@("2025")" />
+                        <MudSelectItem Value="@("2026")" />
+                        <MudSelectItem Value="@("2027")" />
+                        <MudSelectItem Value="@("2028")" />
+                        <MudSelectItem Value="@("2029")" />
+                        <MudSelectItem Value="@("2030")" />
+                        <MudSelectItem Value="@("2031")" />
+                        <MudSelectItem Value="@("2032")" />
+                        </MudSelect>
                         </MudItem>
                         <MudItem xs="12">
-                            <MudFab Size="Size.Large" ButtonType="ButtonType.Submit" Style="background-color: #689F38; color: #FFFFFF; text-transform:none;" Label="&nbsp;&nbsp;Sign up&nbsp;&nbsp;" />
+                        <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;">You must review and accept the Terms and Conditions before subscribing.</MudText>
+                        <MudCheckBox @bind-Checked="signUp.CheckBox" Label=" I agree and accept." Style="font-family: 'Inter'; color:#08243D;"></MudCheckBox>
                         </MudItem>
-                    </MudGrid>
-                </EditForm>
-            </MudItem>
+                        </MudGrid>
+                        </MudItem>*@
+                                <MudItem xs="12">
+                                    <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;"><b>How Did You Find Us? (optional)</b></MudText>
+                                </MudItem>
+                                <MudItem xs="8">
+                                    <MudTextField @bind-Value="signUp.About" Lines="4" Variant="Variant.Outlined"></MudTextField>
+                                </MudItem>
+                                <MudItem xs="12">
+                                    <MudFab Size="Size.Large" ButtonType="ButtonType.Submit" Style="background-color: #B7DF38; color: #0D3255; text-transform:none;" Label="&nbsp;&nbsp;Sign up&nbsp;&nbsp;" />
+                                </MudItem>
+                            </MudGrid>
+                        </EditForm>
+                    </MudItem>
+                }
+                else
+                {
+                    <MudItem xs="8">
+                        <EditForm Model="payment" OnValidSubmit="HandleSubmit1">
+                            <DataAnnotationsValidator />
+                            <MudGrid Class="mb-2" Spacing="1">
+                                <MudItem xs="12">
+                                    <MudText Typo="Typo.h4" Class="mb-2" Style="font-family: 'Inter';font-weight: 700; color:#08243D;">Membership Sign Up</MudText>
+                                </MudItem>
+                                <MudItem xs="12">
+                                    <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;"><b>Step 1.</b></MudText>
+                                    <MudText Typo="Typo.h6" Style="font-family: 'Inter'; color:#08243D;"><b>Select membership plan</b></MudText>
+                                </MudItem>
+                                <MudItem xs="12">
+                                    <MudRadioGroup Required="true" @bind-SelectedOption="payment.PlanType">
+                                        <MudRadio Size="Size.Small" Option="@("Monthly")"><MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;">Monthly <MudIcon Icon="@Icons.Material.Filled.Star" Size="Size.Small" Style="color:#08243D;" /><b>Special Special - Discount on first month</b> $4.95 First Month <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;">(normally $9.95)<br />After the first month, the Monthly Membership automatically renews at $9.95. <br />each month until you cancel the renewal. You can cancel the renewal at any time online.</MudText></MudText></MudRadio>
+                                        <br />
+                                        <MudRadio Size="Size.Small" Option="@("3 Months")"><MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;">3 Months - $25.00 <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;">(normally $29.85)</MudText></MudText></MudRadio>
+                                        <br />
+                                        <MudRadio Size="Size.Small" Option="@("6 Months")"><MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;">6 Months - $45.00 <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;">(normally $59.70)</MudText></MudText></MudRadio>
+                                        <br />
+                                        <MudRadio Size="Size.Small" Option="@("12 Months")"><MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;">12 Months - $70.00 <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;">(normally $119.40)</MudText></MudText></MudRadio>
+                                    </MudRadioGroup>
+                                </MudItem>
+                            </MudGrid>
+                            <MudGrid Class="mb-2" Spacing="1">
+                                <MudItem xs="12">
+                                    <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;"><b>Step 2.</b></MudText>
+                                </MudItem>
+                                @{
+                                    if (Error.Length > 0)
+                                    {
+                                        <MudItem xs="8">
+                                            <MudAlert Severity="Severity.Error" Dense="true">@Error</MudAlert>
+                                        </MudItem>
+                                    }
+                                }
+                                <MudItem xs="8">
+                                    <MudTextField Label="Email Address" @bind-Value="payment.Email" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>payment.Email)" HelperText="(this will be your login id)"></MudTextField>
+                                </MudItem>
+                                <MudItem xs="1">
+                                    <MudTooltip Placement="Placement.Top" Text="Please enter valid email address only.">
+                                        <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                                    </MudTooltip>
+                                </MudItem>
+                                <MudItem xs="8">
+                                    <MudTextField Label="Password" @bind-Value="payment.Password" Required="true" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>payment.Password)" HelperText="(Min. 6 characters, digit (0-9), uppercase(A-Z) and special character.)" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowPassword" AdornmentAriaLabel="Show Password"></MudTextField>
+                                </MudItem>
+                                <MudItem xs="1">
+                                    <MudTooltip Placement="Placement.Top" Text="Password must contains 6 characters, digit (0-9), uppercase(A-Z) and special character.">
+                                        <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                                    </MudTooltip>
+                                </MudItem>
+                                <MudItem xs="12">
+                                    <MudFab Size="Size.Large" ButtonType="ButtonType.Submit" Style="background-color: #B7DF38; color: #0D3255; text-transform:none;" Label="&nbsp;&nbsp;Pay Now&nbsp;&nbsp;" />
+                                </MudItem>
+                            </MudGrid>
+                        </EditForm>
+                    </MudItem>
+                }
+            }
             <MudItem xs="4">
                 <MudGrid Justify="Justify.Center">
                     <MudItem xs="12" Class="border mt-4">
@@ -199,8 +240,15 @@
 
 
 @code{
+    [Parameter]
+    public string email { get; set; } = string.Empty;
+    [Parameter]
+    public string password { get; set; } = string.Empty;
+
     SignUp signUp = new SignUp();
+    SignUpPayment payment = new SignUpPayment();
     public string Error { get; set; } = string.Empty;
+    public bool status { get; set; } = false;
 
     private bool isShow { get; set; }
     InputType PasswordInput = InputType.Password;
@@ -208,7 +256,7 @@
 
     void ShowPassword()
     {
-        @if (isShow)
+        if (isShow)
         {
             isShow = false;
             PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
@@ -222,26 +270,44 @@
         }
     }
 
-    public async Task HandleSubmit()
+    protected override void OnInitialized()
     {
-        if (signUp.PlanType == "Monthly")
+        if(email != null && password != null)
         {
-            signUp.PlanPrice = 9.95m;
-        }
-        else if (signUp.PlanType == "3 Months")
-        {
-            signUp.PlanPrice = 29.85m;
-        }
-        else if (signUp.PlanType == "6 Months")
-        {
-            signUp.PlanPrice = 59.70m;
+            String _email = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(email));
+            signUp.Email = _email;
+            String _password = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(password));
+            signUp.Password = _password;
+            status = true;
+            snackBar.Add("Payment completed successfully.", Severity.Success);
         }
         else
         {
-            signUp.PlanPrice = 119.40m;
+            payment = new();
+        }
+    }
+
+
+    public async Task HandleSubmit1()
+    {
+        if (payment.PlanType == "Monthly")
+        {
+            payment.PlanPrice = 4.95m;
+        }
+        else if (payment.PlanType == "3 Months")
+        {
+            payment.PlanPrice = 25.00m;
+        }
+        else if (payment.PlanType == "6 Months")
+        {
+            payment.PlanPrice = 45.00m;
+        }
+        else
+        {
+            payment.PlanPrice = 70.00m;
         }
 
-        var result = await Http.PostAsJsonAsync("/api/ApplicationUser/emailcheck", signUp);
+        var result = await Http.PostAsJsonAsync("/api/ApplicationUser/emailcheck", payment);
         if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
         {
             var error = await result.Content.ReadAsStringAsync();
@@ -253,16 +319,18 @@
         }
         if (result.IsSuccessStatusCode)
         {
-            var result1 = await Http.PostAsJsonAsync("/api/ApplicationUser/checkout", signUp);
+            var result1 = await Http.PostAsJsonAsync("/api/ApplicationUser/checkout", payment);
             var url = await result1.Content.ReadAsStringAsync();
             navigationManager.NavigateTo(url);
-
-            var result2 = await Http.PostAsJsonAsync("/api/ApplicationUser/signup", signUp);                           
-            if (result2.IsSuccessStatusCode)
-            {
-                snackBar.Add("We have emailed a link for confirm account.", Severity.Success);
-                navigationManager.NavigateTo("/signup");
-            }
+        }
+    }
+    public async Task HandleSubmit2()
+    {
+        var result = await Http.PostAsJsonAsync("/api/ApplicationUser/signup", signUp);
+        if (result.IsSuccessStatusCode)
+        {
+            snackBar.Add("We have emailed a link for confirm account. Please check your email.", Severity.Success);
+            navigationManager.NavigateTo("/signup");
         }
     }
 }

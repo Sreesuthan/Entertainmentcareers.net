@@ -13,7 +13,7 @@ namespace Entertainmentcareers.net.Shared
         [Required]
         [EmailAddress(ErrorMessage ="Enter valid email address.")]
         public string Email { get; set; } = string.Empty; 
-        [Required,]
+        [Required]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}", ErrorMessage = "Password must contains 6 characters, digit (0-9), uppercase(A-Z) and special character.")]
         public string Password { get; set; } = string.Empty;
         [Required]
