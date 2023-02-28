@@ -556,7 +556,7 @@
 
     async Task ReallyLeave(LocationChangingContext context)
     {
-        if (context.TargetLocation.Contains("editjob") != true)
+        if (context.TargetLocation.Contains("editjob") != true && context.TargetLocation != "joblist")
         {
             var confirmed = await Js.InvokeAsync<bool>("window.confirm", "Changes you made may not be saved. Are sure you wanna leave?");
             if (!confirmed)
