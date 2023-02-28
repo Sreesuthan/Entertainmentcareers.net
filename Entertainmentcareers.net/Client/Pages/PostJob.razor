@@ -356,32 +356,53 @@
                 <MudCardContent>
                     <MudGrid Class="mb-2" Justify="Justify.Center">
                     <MudItem xs="10" Class="mt-2">
-                    <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="mb-5 border-bottom pb-2" GutterBottom="true">Post a Job: Preview</MudText>
+                    <MudGrid>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="mb-2 border-bottom pb-2" GutterBottom="true">Post a Job: Preview</MudText>
+                        </MudItem>
                         <MudItem xs="12" Class="mt-2">
                                     <MudText Typo="Typo.h5" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.JobTitle</MudText>
                         </MudItem>
-                        <MudItem xs="12">
-                        <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.CompanyName @job.City @job.State @job.Country</MudText>
+                        <MudItem xs="2">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Employer Email :</b></MudText>
                         </MudItem>
-                        <MudItem xs="12">
-                        <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Details</MudText>
+                        <MudItem xs="10">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Email</MudText>
                         </MudItem>
-                            <MudItem xs="12">
-                                <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Salary</b></MudText>
+                        <MudItem xs="2">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Company Name :</b></MudText>
+                        </MudItem>
+                        <MudItem xs="10">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.CompanyName</MudText>
+                        </MudItem>
+                        <MudItem xs="2">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Address :</b></MudText>
+                        </MudItem>
+                        <MudItem xs="10">
+                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.City, @job.State, @job.Country</MudText>
                             </MudItem>
-                            <MudItem xs="12">
-                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Salary</MudText>
+                            <MudItem xs="2">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Job Type :</b></MudText>
+                        </MudItem>
+                                <MudItem xs="10">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.JobType</MudText>
+                                </MudItem>
+                                <MudItem xs="2">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Job/Intership :</b></MudText>
+                        </MudItem>
+                                <MudItem xs="10">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.EmploymentType</MudText>
+                                </MudItem>
+                                <MudItem xs="2">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Job Category :</b></MudText>
+                        </MudItem>
+                        <MudItem xs="10">
+                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Category</MudText>
                             </MudItem>
-                            <MudItem xs="12">
-                                <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Additional Information</b></MudText>
-                            </MudItem>
-                            <MudItem xs="12">
-                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.AdditionalComments</MudText>
-                            </MudItem>
-                            <MudItem xs="12">
-                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Job Category:</b> @job.Category</MudText>
-                            </MudItem>
-                            <MudItem xs="12">
+                            <MudItem xs="2">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Lastdate to Apply:</b></MudText>
+                        </MudItem>
+                            <MudItem xs="10">
                                     @{
                                         if (job.LastDateToApply.ToString().Length > 0)
                                         {
@@ -390,43 +411,74 @@
                                             ValidLastDateToApply = strings[0];
                                         }
                                     }
-                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Last Date to Apply:</b> @ValidLastDateToApply</MudText>
+                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@ValidLastDateToApply</MudText>
                             </MudItem>
-                            <MudItem xs="12">
-                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Job Code:</b> @job.JobCode</MudText>
+                                @{
+                                    if(job.JobCode.Length > 0)
+                                    {<MudItem xs="2">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Job Code :</b></MudText>
+                        </MudItem>
+                                        <MudItem xs="10">
+                                            <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.JobCode</MudText>
+                                        </MudItem>
+                                    }
+                                }<MudItem xs="2">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Website :</b></MudText>
+                        </MudItem>
+                                <MudItem xs="10">
+                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Website</MudText>
+                                </MudItem>
+                        <MudItem xs="12">
+                                <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Details</b></MudText>
                             </MudItem>
-                            <MudItem xs="12" Class="mt-6 mb-6">
-                                <MudGrid Style="background-color:#EEF5F8">
-                                    <MudItem xs="12">
-                                                <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" Class="border-bottom pb-2"><b>Contact the Employer</b></MudText>
-                                    </MudItem>
-                                    <MudItem xs="12">
-                                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">Please tell this employer that you found the listing at <b>EntertainmentCareers.Net</b></MudText>
-                                    </MudItem>
+                        <MudItem xs="12">
+                        <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Details</MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                                    <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Instructions</b></MudText>
+                            </MudItem>
                                     <MudItem xs="12">
                                         <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">@job.Instructions</MudText>
                                     </MudItem>
-                                    <MudItem xs="2">
-                                    <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter';color:#08243D;"><b>Email:</b></MudText>
-                                    </MudItem>
-                                     <MudItem xs="10">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">Your anonymous EntertainmentCareers.Net email address will be shown here and will forward to<br/><b>@job.Email</b></MudText>
-                                    </MudItem>
-                                </MudGrid>
+                            <MudItem xs="12">
+                                <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Salary</b></MudText>
                             </MudItem>
-                           <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;"><b>By clicking on Submit, you agree to abide by our site policies, terms and conditions.</b></MudText>       
-                        </MudItem>
+                            <MudItem xs="12">
+                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Salary</MudText>
+                            </MudItem>
+                            @{
+                                if(job.AdditionalComments.Length > 0)
+                                {
+                                    <MudItem xs="12">
+                                        <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Additional Information</b></MudText>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.AdditionalComments</MudText>
+                                    </MudItem>
+                                }
+                            }
+                            @{
+                                        if (job.InstructionForUs.Length > 0)
+                                {
+                                    <MudItem xs="12">
+                                        <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Private Instruction</b></MudText>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.InstructionForUs</MudText>
+                                    </MudItem>
+                                }
+                            }
                     </MudGrid>
+                        </MudItem>
+                        </MudGrid>
                  </MudCardContent>
                 <MudCardActions>
                 <MudGrid Justify="Justify.Center">
                     <MudItem xs="10">
                     <MudItem xs="12">
-                                    <MudButton OnClick="()=>Submit()" Style="background-color: #B7DF38; color: #0D3255;" Variant=" Variant.Filled">Submit</MudButton>
+                                    <MudChip OnClick="()=>Edit()" Size="Size.Large"><b>Go Back</b></MudChip>
+                                    <MudChip OnClick="()=>Submit()" Style="background-color: #B7DF38; color: #0D3255;" Size="Size.Large" Class="ml-4"><b>Submit</b></MudChip>
                     </MudItem>
-                    <MudItem xs="12">
-                                    <MudChip OnClick="()=>Edit()"><b>Go Back</b></MudChip>
-                        </MudItem>
                             </MudItem>
                         </MudGrid>
                 </MudCardActions>
@@ -460,7 +512,6 @@
     public string ValidLastDateToApply = string.Empty;
     public int Words;
     public bool IsPreview = false;
-    public bool AllowLeave = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -488,30 +539,45 @@
 
     async Task ReallyLeave(LocationChangingContext context)
     {
-        var confirmed = await Js.InvokeAsync<bool>("window.confirm", "Changes you made may not be saved. Are sure you wanna leave?");
-        if (!confirmed)
+        if (context.TargetLocation != "postjob")
         {
-            context.PreventNavigation();
+            var confirmed = await Js.InvokeAsync<bool>("window.confirm", "Changes you made may not be saved. Are sure you wanna leave?");
+            if (!confirmed)
+            {
+                context.PreventNavigation();
+            }
         }
     }
 
     void HandleSubmit()
     {
-        AllowLeave = true;
         IsPreview = true;
+        if (EmploymentType == "Job")
+        {
+            job.EmploymentType = EmploymentType;
+        }
+        else
+        {
+            if (InternshipType == "Paid Internship")
+            {
+                job.EmploymentType = InternshipType;
+            }
+            else
+            {
+                job.EmploymentType = InternshipType;
+            }
+        }
         navigationManager.NavigateTo("postjob");
     }
 
     void Edit()
     {
-        AllowLeave = true;
         IsPreview = false;
         navigationManager.NavigateTo("postjob");
     }
 
     async Task Submit()
     {
-        AllowLeave = true;
         if (job.Details.Length > 0)
         {
             var Details = job.Details;
@@ -520,21 +586,6 @@
         }
         if (Words < 2000)
         {
-            if (EmploymentType == "Job")
-            {
-                job.EmploymentType = EmploymentType;
-            }
-            else
-            {
-                if (InternshipType == "Paid Internship")
-                {
-                    job.EmploymentType = InternshipType;
-                }
-                else
-                {
-                    job.EmploymentType = InternshipType;
-                }
-            }
             job.CreateDate = DateTime.Now;
             job.Active = true;
             job.Employer = "Sree";

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Pages\Index.razor~RF147cf4ad.TMP" />
     <None Remove="Shared\MainLayout.razor~RFaaa1609.TMP" />
   </ItemGroup>
 

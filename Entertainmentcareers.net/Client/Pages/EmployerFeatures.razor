@@ -1,0 +1,150 @@
+﻿@layout EmployerLayout
+@page "/employerfeatures"
+
+<MudGrid Justify="Justify.Center" Class="mt-8 mb-8">
+    <MudItem xs="10" Class="border" Style="border-top-left-radius: 25px; border-top-right-radius:25px;">
+        <MudGrid Style="background-color:#136BBE; border-top-left-radius: 25px; border-top-right-radius:25px;">
+            <MudItem xs="8">
+                <MudGrid Spacing="0" Class="mt-8">
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h4" Style="font-size:37px; font-family: 'Inter';font-weight: 700; color:#B7DF38" Class="pb-2">Highly Qualified and Diverse Candidates</MudText>
+                    </MudItem>
+                    <MudItem xs="9">
+                        <MudText Typo="Typo.h6" Style="font-size:18px; font-family: 'Inter';font-weight: 700;" Class="pb-2 text-white">Welcome to our amazing community of highly qualified and<br />diverse candidates - quickly and easily connect with our top<br />talent. Have any questions? Reach out anytime!</MudText>
+                    </MudItem>
+                    <MudItem xs="3" Class="text-center">
+                        <MudButton Href="/postjob" Size="Size.Large" Style="background-color: #B7DF38; font-size:18px; font-family: 'Inter';font-weight: 700; color: #0D3255; text-transform:none; width: 156px; height: 54px;" Class="mt-6" Variant=" Variant.Filled"><b>Post a Job</b></MudButton>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+            <MudItem xs="4">
+                <a href="/companies"><MudImage Src="Images/employer.png" Fluid="true" /></a>
+            </MudItem>
+        </MudGrid>
+        <MudGrid Class="mt-6">
+            <MudItem xs="4">
+                <MudCard>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="12" Style="background-color:#EEF5F8" Class="border-bottom">
+                                <MudText Typo="Typo.h6" Style="font-size:18px;font-family: 'Inter'; color:#08243D;"><b>Basic Posting</b></MudText>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="3" Class="text-center">
+                                        <MudIcon Icon="@Icons.Material.Filled.ListAlt" Style="height:60px; width:60px;" Size="Size.Large" />
+                                    </MudItem>
+                                    <MudItem xs="9">
+                                        <MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;"><b>Job/Internship Posting</b></MudText>
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="mt-2">Posting is quick and simple with no account required. Highly qualified candidates are just a few clicks away.</MudText>
+                                        <MudFab Size="Size.Small" Href="/postjob" Class="mt-6" Style="background-color: #B7DF38; color: #0D3255;text-transform:none;" Label="Post a Job"></MudFab>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="4">
+                <MudCard>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="12" Style="background-color:#EEF5F8" Class="border-bottom">
+                                <MudText Typo="Typo.h6" Style="font-size:18px;font-family: 'Inter'; color:#08243D;"><b>Premium Postings</b></MudText>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="3">
+                                        <MudIcon Icon="@Icons.Material.Filled.Link" Style="height:60px; width:60px;" Size="Size.Large" />
+                                    </MudItem>
+                                    <MudItem xs="9">
+                                        <MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;"><b>Web Link</b></MudText>
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="mt-2">Have your own job board or applicant tracking system? You can piut in a web link to refer all candidats back to your web site.</MudText>
+                                        <MudFab Size="Size.Small" Class="mt-6" Style="background-color: #B7DF38; color: #0D3255;text-transform:none;" Label="Learn more"></MudFab>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="4">
+                <MudCard>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="12" Style="background-color:#EEF5F8" Class="border-bottom">
+                                <MudText Typo="Typo.h6" Style="font-size:18px;font-family: 'Inter'; color:#08243D;"><b>Featured Posting</b></MudText>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="3">
+                                        <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowUp" Style="height:60px; width:60px;" Size="Size.Large" />
+                                    </MudItem>
+                                    <MudItem xs="9">
+                                        <MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;"><b>Boost Your Posting</b></MudText>
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="mt-2">Attract more candidates by featuring your posting on the front page or keep it on top of the search results. You can also add a logo or feature your company.</MudText>
+                                        <MudFab Size="Size.Small" Class="mt-1" Style="background-color: #B7DF38; color: #0D3255;text-transform:none;" Label="Learn more"></MudFab>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="4">
+                <MudCard>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="12" Style="background-color:#EEF5F8" Class="border-bottom">
+                                <MudText Typo="Typo.h6" Style="font-size:18px;font-family: 'Inter'; color:#08243D;"><b>Automated posting</b></MudText>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="3">
+                                        <MudIcon Icon="@Icons.Material.Filled.SettingsSuggest" Style="height:60px; width:60px;" Size="Size.Large" />
+                                    </MudItem>
+                                    <MudItem xs="9">
+                                        <MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;"><b>ATC Sync</b></MudText>
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;" Class="mt-2">If you have an ATC or job board. We can automatically post/delete your jobs. A huge time and cost saver.</MudText>
+                                        <MudFab Size="Size.Small" Class="mt-5" Style="background-color: #B7DF38; color: #0D3255;text-transform:none;" Label="Learn more"></MudFab>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="8">
+                <MudCard>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="12" Style="background-color:#EEF5F8" Class="border-bottom">
+                                <MudText Typo="Typo.h6" Style="font-size:18px;font-family: 'Inter'; color:#08243D;"><b>Why Employers Use Us</b></MudText>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="6">
+                                        <MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;"><b>- Top Candidates</b></MudText>
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;">Since we only focus on entertainment and digital media, we attract highly qualified candidates with the required experience.</MudText>
+                                        <MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;"><b>- Diversity</b></MudText>
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;">We are proud to be a resource for diverse candidates. We have guided 2 generations of people get into the industry.</MudText>
+                                    </MudItem>
+                                    <MudItem xs="6">
+                                        <MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;"><b>- Customer Support</b></MudText>
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;">We have a support team ready to help with any question or request. We can be reached via phone, email or chat. We are here to help 24/7.</MudText>
+                                        <MudText Typo="Typo.body1" Style="font-family: 'Inter'; color:#08243D;"><b>- 23 Year Track Record</b></MudText>
+                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter'; color:#08243D;">Since 1999, we have helped over 20,000 employers find candidates for over 300,000 jobs.</MudText>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
+
+
+@code {
+}
