@@ -7,321 +7,254 @@
 @inject IJSRuntime Js
 @inject NavigationManager navigationManager
 
-@{
-    if(!IsPreview)
-    {
-    <MudGrid Justify="Justify.Center">
-        <MudItem xs="10">
-            <EditForm Model="job" OnValidSubmit="HandleSubmit">
-                <DataAnnotationsValidator />
-                <MudCard Class="mt-8 mb-4">
-            <MudCardContent>
-            <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="mb-5 border-bottom pb-2" GutterBottom="true">Post a Job</MudText>
-                <MudGrid Class="mb-4">
-                    <MudItem xs="9" Style="background-color:#EEF5F8">
-                        <MudGrid Spacing="1">
-                            <MudItem xs="12">
-                                   <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true"><MudIcon Icon="@Icons.Material.Outlined.Lock"/> Your Contact Information (Not visible to job seekers)</MudText>
-                                   <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Enter compay email address.<br />Email address will not be seen by the public.<br />It is only used to manage your postings.</MudText>
-                            </MudItem>
-                            <MudItem xs="9">
-                                       <MudTextField Label="Email" @bind-Value="job.Email" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>job.Email)" Required="true"></MudTextField>
-                            </MudItem>
-                            <MudItem xs="1">
-                                <MudTooltip Placement="Placement.Top" Text="A private email address is required. This address is used to manage your postings.">
-                                            <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                </MudTooltip>
-                            </MudItem>
-                        </MudGrid>
-                    </MudItem>
-                    <MudItem xs="9" Class="mt-4">
-                        <MudGrid Spacing="1">
-                            <MudItem xs="12" Class="mt-2">
-                                <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Job Posting Information (Visible to job seekers)</MudText>
-                            </MudItem>
-                            <MudItem xs="4" Class="mt-2">
-                                <MudSelect Label="Job Type" Margin="Margin.Dense" Variant="Variant.Outlined" @bind-Value="job.JobType" For="@(()=>job.JobType)"  Required="true">
-                                    @foreach (var jobtype in jobTypes)
-                                    {
-                                        <MudSelectItem Value="jobtype.Jobtype">@jobtype.Jobtype</MudSelectItem>
-                                    }
-                                </MudSelect>
-                            </MudItem>
-                            <MudItem xs="1" Class="mt-2">
-                                <MudTooltip Placement="Placement.Top" Text="Please tell us whether the position is full time or part time.">
-                                    <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                </MudTooltip>
-                            </MudItem>
-                            <MudItem xs="7" Class="mt-2"></MudItem>
-                            <MudItem xs="4" Class="mt-2">
-                                <MudSelect Label="Job or Internship" T="string" Margin="Margin.Dense" Variant="Variant.Outlined" @bind-Value="EmploymentType"  Required="true">
-                                    <MudSelectItem Value="@("Job")" />
-                                    <MudSelectItem Value="@("Internship")">Internship</MudSelectItem>
-                                </MudSelect>
-                            </MudItem>
-                            <MudItem xs="1" Class="mt-2">
-                                <MudTooltip Placement="Placement.Top" Text="Please tell us if this is a job, or internship.">
-                                    <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                </MudTooltip>
-                            </MudItem>
-                            <MudItem xs="4" Class="mt-2">
-                                @{
-                                    if (EmploymentType == "Internship")
-                                    {
-                                                    <MudSelect Label="Paid or UnPaid" T="string" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" @bind-Value="InternshipType">
-                                            <MudSelectItem Value="@("Paid Internship")" />
-                                            <MudSelectItem Value="@("Unpaid Internship")" />
-                                        </MudSelect>
-                                    }
-                                    else
-                                    { }
-                                }
-                            </MudItem>
-                            <MudItem xs="1" Class="mt-2">
-                                @{
-                                    if (EmploymentType == "Internship")
-                                    {
-                                        <MudTooltip Placement="Placement.Top" Text="Please tell us if this is a unpaid internship, or paid internship.">
-                                            <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                        </MudTooltip>
-                                    }
-                                    else
-                                    { }
-                                }
-                            </MudItem>
-                            <MudItem xs="4" Class="mt-2">
-                                <MudSelect Label="Job Category" Margin="Margin.Dense" Variant="Variant.Outlined" @bind-Value="@job.Category" Required="true" For="@(()=>job.Category)">
-                                    @foreach (var category in categories)
-                                    {
-                                        <MudSelectItem Value="category.Category">@category.Category</MudSelectItem>
-                                    }
-                                </MudSelect>
-                            </MudItem>
-                            <MudItem xs="1" Class="mt-2">
-                                <MudTooltip Placement="Placement.Top" Text="Please tell us whether the position is full time or part time.">
-                                    <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                </MudTooltip>
-                            </MudItem>
-                            <MudItem xs="7" Class="mt-2"></MudItem>
-                            <MudItem xs="9" Class="mt-2">
-                                            <MudTextField Label="Company Name" @bind-Value="job.CompanyName" Margin="Margin.Dense" Variant="Variant.Outlined" Required="true" For="@(()=>job.CompanyName)"></MudTextField>
-                            </MudItem>
-                            <MudItem xs="1" Class="mt-2">
-                                <MudTooltip Placement="Placement.Top">
-                                    <ChildContent>
-                                        <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                    </ChildContent>
-                                    <TooltipContent>
-                                        <MudText Typo="Typo.caption">The Company Name is required even if you want a Confidential posting.<br />Please enter the full, legal name of the Company (including Inc, LLC, etc...).<br />Max Length: 50 characters. If want a Confidential posting,<br />click 'No' in the Show Company Name option below.</MudText>
-                                    </TooltipContent>
-                                </MudTooltip>
-                            </MudItem>
-                            <MudItem xs="5" Class="mt-4">
-                                        <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Show Company Name in posting?*</MudText>
-                            </MudItem>
-                            <MudItem xs="4" Class="mt-2">
-                                            <MudRadioGroup @bind-SelectedOption="job.ShowCompanyName" Required="true" For="@(()=>job.ShowCompanyName)">
-                                    <MudRadio Option="true" Size="Size.Small" Style="font-family: 'Inter'; color:#08243D;" Dense="false">Yes</MudRadio>
-                                    <MudRadio Option="false" Size="Size.Small" Style="font-family: 'Inter'; color:#08243D;" Dense="false">No</MudRadio>
-                                </MudRadioGroup>
-                            </MudItem>
-                            <MudItem xs="1" Class="mt-2">
-                                <MudTooltip Placement="Placement.Top" Text="Listing will show as 'Confidential' if you choose 'No'">
-                                    <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                </MudTooltip>
-                            </MudItem>
-                            <MudItem xs="9" Class="mt-2">
-                                            <MudTextField Label="Job title" @bind-Value="job.JobTitle" Margin="Margin.Dense" Variant="Variant.Outlined" Required="true" For="@(()=>job.JobTitle)"></MudTextField>
-                            </MudItem>
-                            <MudItem xs="1" Class="mt-2">
-                                <MudTooltip Placement="Placement.Top">
-                                    <ChildContent>
-                                        <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                    </ChildContent>
-                                    <TooltipContent>
-                                        <MudText Typo="Typo.caption">
-                                            Please enter a specific Job Title only (Max Length: 50 characters).<br />Do not use any description or ALL CAPS.<br /><br />
-                                            Good = 'Assistant To President'<br />
-                                            Avoid = 'SEEKING TALENTED BOOKEEPER IN LA - ASAP!'
-                                        </MudText>
-                                    </TooltipContent>
-                                </MudTooltip>
-                            </MudItem>
-                            <MudItem xs="9" Class="mt-2">
-                                <MudTextField Label="Job Code (optional)" @bind-Value="job.JobCode" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>job.JobCode)"></MudTextField>
-                            </MudItem>
-                            <MudItem xs="1" Class="mt-2">
-                                <MudTooltip Placement="Placement.Top">
-                                    <ChildContent>
-                                        <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                    </ChildContent>
-                                    <TooltipContent>
-                                        <MudText Typo="Typo.caption">Select Last date of the job application.</MudText>
-                                    </TooltipContent>
-                                </MudTooltip>
-                            </MudItem>
-                                    <MudItem xs="9" Class="mt-2">
-                                            <MudDatePicker Label="Last Date to Apply" Margin="Margin.Dense" @bind-Date="job.LastDateToApply" Required="true" Variant="Variant.Outlined" For="@(()=>job.LastDateToApply)" />
-                                    </MudItem>
-                                    <MudItem xs="1" Class="mt-2">
-                                        <MudTooltip Placement="Placement.Top">
-                                            <ChildContent>
-                                                <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                            </ChildContent>
-                                            <TooltipContent>
-                                                <MudText Typo="Typo.caption">Select last date to apply for the job.</MudText>
-                                            </TooltipContent>
-                                        </MudTooltip>
-                                    </MudItem>
-                            <MudItem xs="3" Class="mt-6">
-                                <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Location of Job</MudText>
-                            </MudItem>
-                            <MudItem xs="1" Class="mt-4">
-                                <MudTooltip Placement="Placement.Top">
-                                    <ChildContent>
-                                        <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                    </ChildContent>
-                                    <TooltipContent>
-                                        <MudText Typo="Typo.caption">
-                                            Please enter a single city/state/country combination for each listing.
-                                        </MudText>
-                                    </TooltipContent>
-                                </MudTooltip>
-                            </MudItem>
-                                    <MudItem xs="8" Class="mt-2">
-                                    </MudItem>
-                            <MudItem xs="4" Class="mt-2">
-                                <MudTextField Label="City" @bind-Value="job.City" Margin="Margin.Dense" Variant="Variant.Outlined" Required="true" For="@(()=>job.City)"></MudTextField>
-                            </MudItem>
-                            <MudItem xs="3" Class="mt-2">
-                                <MudTextField Label="State" @bind-Value="job.State" Margin="Margin.Dense" Variant="Variant.Outlined" Required="true" For="@(()=>job.State)"></MudTextField>
-                            </MudItem>
-                            <MudItem xs="3" Class="mt-2">
-                                            <MudSelect Label="Country" @bind-Value="job.Country" Margin="Margin.Dense" Variant="Variant.Outlined" Required="true" For="@(()=>job.Country)">
-                                    @foreach (var country in countries)
-                                    {
-                                        <MudSelectItem Value="country.Country">@country.CountryCode  @country.Country</MudSelectItem>
-                                    }
-                                </MudSelect>
-                            </MudItem>
-                            <MudItem xs="12" Class="mt-6">
-                                <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Contact Method</MudText>
-                            </MudItem>
-                            <MudItem xs="9" Class="mt-2">
-                                <MudTextField Label="Website" @bind-Value="job.Website" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>job.Website)"></MudTextField>
-                            </MudItem>
-                                    <MudItem xs="1" Class="mt-2">
-                                <MudTooltip Placement="Placement.Top" Text="Enter the website URL for the job. ">
-                                    <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                </MudTooltip>
-                            </MudItem>
-                        </MudGrid>
-                    </MudItem>
-                    <MudItem xs="3" Class="text-center">
-                        <MudImage Src="Images/chat.png" />
-                        <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Need Help?<br />Click For Support</MudText>
-                    </MudItem>
-    
-                    <MudItem xs="12">
+
+<MudGrid Justify="Justify.Center">
+    <MudItem xs="10">
+        <EditForm Model="job" OnValidSubmit="HandleSubmit">
+            <DataAnnotationsValidator />
+            <MudCard Class="mt-8 mb-4">
+        <MudCardContent>
+        <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="mb-5 border-bottom pb-2" GutterBottom="true">Post a Job</MudText>
+            <MudGrid Class="mb-4">
+                <MudItem xs="9" Style="background-color:#EEF5F8">
                     <MudGrid Spacing="1">
-                        <MudItem xs="3" Class="mt-6">
-                            <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Job Details*</MudText>
+                        <MudItem xs="12">
+                               <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true"><MudIcon Icon="@Icons.Material.Outlined.Lock"/> Your Contact Information (Not visible to job seekers)</MudText>
+                               <MudText Typo="Typo.caption" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Enter compay email address.<br />Email address will not be seen by the public.<br />It is only used to manage your postings.</MudText>
                         </MudItem>
-                        <MudItem xs="9" Class="mt-2">
-                        </MudItem>
-                        <MudItem xs="11">
-                                        <MudTextField @bind-Value="job.Details" Lines="10" Required="true" Variant="Variant.Outlined" For="@(()=>job.Details)" HelperText="Tell us about your job or internship in less than 2000 words. Please do not use ALL CAPS as it will not get processed."></MudTextField>
+                        <MudItem xs="9">
+                                   <MudTextField Label="Email" @bind-Value="job.Email" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>job.Email)" Required="true"></MudTextField>
                         </MudItem>
                         <MudItem xs="1">
+                            <MudTooltip Placement="Placement.Top" Text="A private email address is required. This address is used to manage your postings.">
+                                        <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                            </MudTooltip>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="9" Class="mt-4">
+                    <MudGrid Spacing="1">
+                        <MudItem xs="12" Class="mt-2">
+                            <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Job Posting Information (Visible to job seekers)</MudText>
+                        </MudItem>
+                        <MudItem xs="4" Class="mt-2">
+                            <MudSelect Label="Job Type" Margin="Margin.Dense" Variant="Variant.Outlined" @bind-Value="job.JobType" For="@(()=>job.JobType)"  Required="true">
+                                @foreach (var jobtype in jobTypes)
+                                {
+                                    <MudSelectItem Value="jobtype.Jobtype">@jobtype.Jobtype</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="1" Class="mt-2">
+                            <MudTooltip Placement="Placement.Top" Text="Please tell us whether the position is full time or part time.">
+                                <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                            </MudTooltip>
+                        </MudItem>
+                        <MudItem xs="7" Class="mt-2"></MudItem>
+                        <MudItem xs="4" Class="mt-2">
+                            <MudSelect Label="Job or Internship" T="string" Margin="Margin.Dense" Variant="Variant.Outlined" @bind-Value="EmploymentType"  Required="true">
+                                <MudSelectItem Value="@("Job")" />
+                                <MudSelectItem Value="@("Internship")">Internship</MudSelectItem>
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="1" Class="mt-2">
+                            <MudTooltip Placement="Placement.Top" Text="Please tell us if this is a job, or internship.">
+                                <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                            </MudTooltip>
+                        </MudItem>
+                        <MudItem xs="4" Class="mt-2">
+                            @{
+                                if (EmploymentType == "Internship")
+                                {
+                                                <MudSelect Label="Paid or UnPaid" T="string" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" @bind-Value="InternshipType">
+                                        <MudSelectItem Value="@("Paid Internship")" />
+                                        <MudSelectItem Value="@("Unpaid Internship")" />
+                                    </MudSelect>
+                                }
+                                else
+                                { }
+                            }
+                        </MudItem>
+                        <MudItem xs="1" Class="mt-2">
+                            @{
+                                if (EmploymentType == "Internship")
+                                {
+                                    <MudTooltip Placement="Placement.Top" Text="Please tell us if this is a unpaid internship, or paid internship.">
+                                        <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                                    </MudTooltip>
+                                }
+                                else
+                                { }
+                            }
+                        </MudItem>
+                        <MudItem xs="4" Class="mt-2">
+                            <MudSelect Label="Job Category" Margin="Margin.Dense" Variant="Variant.Outlined" @bind-Value="@job.Category" Required="true" For="@(()=>job.Category)">
+                                @foreach (var category in categories)
+                                {
+                                    <MudSelectItem Value="category.Category">@category.Category</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="1" Class="mt-2">
+                            <MudTooltip Placement="Placement.Top" Text="Please tell us whether the position is full time or part time.">
+                                <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                            </MudTooltip>
+                        </MudItem>
+                        <MudItem xs="7" Class="mt-2"></MudItem>
+                        <MudItem xs="9" Class="mt-2">
+                                        <MudTextField Label="Company Name" @bind-Value="job.CompanyName" Margin="Margin.Dense" Variant="Variant.Outlined" Required="true" For="@(()=>job.CompanyName)"></MudTextField>
+                        </MudItem>
+                        <MudItem xs="1" Class="mt-2">
+                            <MudTooltip Placement="Placement.Top">
+                                <ChildContent>
+                                    <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                                </ChildContent>
+                                <TooltipContent>
+                                    <MudText Typo="Typo.caption">The Company Name is required even if you want a Confidential posting.<br />Please enter the full, legal name of the Company (including Inc, LLC, etc...).<br />Max Length: 50 characters. If want a Confidential posting,<br />click 'No' in the Show Company Name option below.</MudText>
+                                </TooltipContent>
+                            </MudTooltip>
+                        </MudItem>
+                        <MudItem xs="5" Class="mt-4">
+                                    <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Show Company Name in posting?*</MudText>
+                        </MudItem>
+                        <MudItem xs="4" Class="mt-2">
+                                        <MudRadioGroup @bind-SelectedOption="job.ShowCompanyName" Required="true" For="@(()=>job.ShowCompanyName)">
+                                <MudRadio Option="true" Size="Size.Small" Style="font-family: 'Inter'; color:#08243D;" Dense="false">Yes</MudRadio>
+                                <MudRadio Option="false" Size="Size.Small" Style="font-family: 'Inter'; color:#08243D;" Dense="false">No</MudRadio>
+                            </MudRadioGroup>
+                        </MudItem>
+                        <MudItem xs="1" Class="mt-2">
+                            <MudTooltip Placement="Placement.Top" Text="Listing will show as 'Confidential' if you choose 'No'">
+                                <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                            </MudTooltip>
+                        </MudItem>
+                        <MudItem xs="9" Class="mt-2">
+                                        <MudTextField Label="Job title" @bind-Value="job.JobTitle" Margin="Margin.Dense" Variant="Variant.Outlined" Required="true" For="@(()=>job.JobTitle)"></MudTextField>
+                        </MudItem>
+                        <MudItem xs="1" Class="mt-2">
                             <MudTooltip Placement="Placement.Top">
                                 <ChildContent>
                                     <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
                                 </ChildContent>
                                 <TooltipContent>
                                     <MudText Typo="Typo.caption">
-                                        Please enter the job details for the listing including job duties, skill requirements,<br />education needed, union requirements, hours worked, etc..<br />We ask that employers provide at least 1 paragraph of description.<br />
-    
-                                        Think of your posting as an advertisement. The more inviting and informative<br />it is, the better the response. Good ads get results! Be specific<br />with the requirements, especially if computer skills are required.<br /><br />
-    
-                                        Please do not use ALL CAPS.
+                                        Please enter a specific Job Title only (Max Length: 50 characters).<br />Do not use any description or ALL CAPS.<br /><br />
+                                        Good = 'Assistant To President'<br />
+                                        Avoid = 'SEEKING TALENTED BOOKEEPER IN LA - ASAP!'
                                     </MudText>
                                 </TooltipContent>
                             </MudTooltip>
                         </MudItem>
-    
-                        <MudItem xs="5" Class="mt-6">
-                            <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Applicant Instructions*</MudText>
+                        <MudItem xs="9" Class="mt-2">
+                            <MudTextField Label="Job Code (optional)" @bind-Value="job.JobCode" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(()=>job.JobCode)"></MudTextField>
                         </MudItem>
-                        <MudItem xs="7" Class="mt-2">
+                        <MudItem xs="1" Class="mt-2">
+                            <MudTooltip Placement="Placement.Top">
+                                <ChildContent>
+                                    <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                                </ChildContent>
+                                <TooltipContent>
+                                            <MudText Typo="Typo.caption">Optional. Use this field to enter in a job number / job code that<br />the applicant should reference when applying.</MudText>
+                                </TooltipContent>
+                            </MudTooltip>
                         </MudItem>
-                        <MudItem xs="11">
-                                        <MudTextField @bind-Value="job.Instructions" Lines="5" Variant="Variant.Outlined" Required="true" For="@(()=>job.Instructions)" HelperText="Use this space for any specific instructions to the applicant. (Ex. 'Please send email and cover letter outlining why you are a good fit for this job.') etc."></MudTextField>
+                                <MudItem xs="9" Class="mt-2">
+                                        <MudDatePicker Label="Last Date to Apply" Margin="Margin.Dense" @bind-Date="job.LastDateToApply" Required="true" Variant="Variant.Outlined" For="@(()=>job.LastDateToApply)" />
+                                </MudItem>
+                                <MudItem xs="1" Class="mt-2">
+                                    <MudTooltip Placement="Placement.Top">
+                                        <ChildContent>
+                                            <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                                        </ChildContent>
+                                        <TooltipContent>
+                                            <MudText Typo="Typo.caption">Select last date to apply for the job.</MudText>
+                                        </TooltipContent>
+                                    </MudTooltip>
+                                </MudItem>
+                        <MudItem xs="3" Class="mt-6">
+                            <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Location of Job</MudText>
                         </MudItem>
-                                    <MudItem xs="1">
-                                        <MudTooltip Placement="Placement.Top">
-                                            <ChildContent>
-                                                <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                            </ChildContent>
-                                            <TooltipContent>
-                                                <MudText Typo="Typo.caption">
-                                                    Use this space for any instructions to the applicant.<br />
-                                                    Do not use this space for contact information. i.e. fax, email,<br />or mailing address. Put those in the CONTACT METHOD section.
-                                                </MudText>
-                                            </TooltipContent>
-                                        </MudTooltip>
-                                    </MudItem>
-    
-                                    <MudItem xs="4" Class="mt-6">
-                                    <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Salary & Benefits*</MudText>
+                        <MudItem xs="1" Class="mt-4">
+                            <MudTooltip Placement="Placement.Top">
+                                <ChildContent>
+                                    <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                                </ChildContent>
+                                <TooltipContent>
+                                    <MudText Typo="Typo.caption">
+                                        Please enter a single city/state/country combination for each listing.
+                                    </MudText>
+                                </TooltipContent>
+                            </MudTooltip>
                         </MudItem>
                                 <MudItem xs="8" Class="mt-2">
                                 </MudItem>
-                                <MudItem xs="11">
-                                            <MudTextField @bind-Value="job.Salary" Lines="5" Variant="Variant.Outlined" Required="true" For="@(()=>job.Salary)"></MudTextField>
-                                </MudItem>
-                                <MudItem xs="1">
-                                    <MudTooltip Placement="Placement.Top">
-                                        <ChildContent>
-                                            <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                        </ChildContent>
-                                        <TooltipContent>
-                                            <MudText Typo="Typo.caption">
-                                                Please enter salary and benefit information for the position.
-                                            </MudText>
-                                        </TooltipContent>
-                                    </MudTooltip>
-                                </MudItem>
-    
-                                <MudItem xs="8" Class="mt-6">
-                                    <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Additional Comments/ Your company info (optional)</MudText>
+                        <MudItem xs="4" Class="mt-2">
+                            <MudTextField Label="City" @bind-Value="job.City" Margin="Margin.Dense" Variant="Variant.Outlined" Required="true" For="@(()=>job.City)"></MudTextField>
                         </MudItem>
-                                <MudItem xs="4" Class="mt-2">
-                                </MudItem>
-                                <MudItem xs="11">
-                                        <MudTextField @bind-Value="job.AdditionalComments" Lines="5" Variant="Variant.Outlined" For="@(()=>job.AdditionalComments)"></MudTextField>
-                                </MudItem>
-                                
-                        <MudItem xs="1">
-                            <MudTooltip Placement="Placement.Top">
-                                <ChildContent>
-                                    <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
-                                </ChildContent>
-                                <TooltipContent>
-                                    <MudText Typo="Typo.caption">
-                                                Use this space to describe any additional information such as a<br/>pitch about your company, EOE, etc...
-                                    </MudText>
-                                </TooltipContent>
+                        <MudItem xs="3" Class="mt-2">
+                            <MudTextField Label="State" @bind-Value="job.State" Margin="Margin.Dense" Variant="Variant.Outlined" Required="true" For="@(()=>job.State)"></MudTextField>
+                        </MudItem>
+                        <MudItem xs="3" Class="mt-2">
+                                        <MudSelect Label="Country" @bind-Value="job.Country" Margin="Margin.Dense" Variant="Variant.Outlined" Required="true" For="@(()=>job.Country)">
+                                @foreach (var country in countries)
+                                {
+                                    <MudSelectItem Value="country.Country">@country.CountryCode  @country.Country</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="12" Class="mt-6">
+                            <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Contact Method</MudText>
+                        </MudItem>
+                        <MudItem xs="9" Class="mt-2">
+                            <MudTextField Label="Website" @bind-Value="job.Website" Margin="Margin.Dense" Required="true" Variant="Variant.Outlined" For="@(()=>job.Website)"></MudTextField>
+                        </MudItem>
+                                <MudItem xs="1" Class="mt-2">
+                            <MudTooltip Placement="Placement.Top" Text="Enter the website URL for the job. ">
+                                <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
                             </MudTooltip>
                         </MudItem>
-    
-                        <MudItem xs="6" Class="mt-6">
-                                    <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Private Instruction To Us (optional) </MudText>
-                        </MudItem>
-                        <MudItem xs="6" Class="mt-2">
-                        </MudItem>
-                        <MudItem xs="11">
-                                   <MudTextField @bind-Value="job.InstructionForUs" Lines="5" Variant="Variant.Outlined" For="@(()=>job.InstructionForUs)"></MudTextField>
-                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="3" Class="text-center">
+                    <MudImage Src="Images/chat.png" />
+                    <MudText Typo="Typo.subtitle1" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Need Help?<br />Click For Support</MudText>
+                </MudItem>
+
+                <MudItem xs="12">
+                <MudGrid Spacing="1">
+                    <MudItem xs="3" Class="mt-6">
+                        <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Job Details*</MudText>
+                    </MudItem>
+                    <MudItem xs="9" Class="mt-2">
+                    </MudItem>
+                    <MudItem xs="11">
+                                    <MudTextField @bind-Value="job.Details" Lines="10" Required="true" Variant="Variant.Outlined" For="@(()=>job.Details)" HelperText="Tell us about your job or internship in less than 2000 words. Please do not use ALL CAPS as it will not get processed."></MudTextField>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudTooltip Placement="Placement.Top">
+                            <ChildContent>
+                                <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                            </ChildContent>
+                            <TooltipContent>
+                                <MudText Typo="Typo.caption">
+                                    Please enter the job details for the listing including job duties, skill requirements,<br />education needed, union requirements, hours worked, etc..<br />We ask that employers provide at least 1 paragraph of description.<br />
+
+                                    Think of your posting as an advertisement. The more inviting and informative<br />it is, the better the response. Good ads get results! Be specific<br />with the requirements, especially if computer skills are required.<br /><br />
+
+                                    Please do not use ALL CAPS.
+                                </MudText>
+                            </TooltipContent>
+                        </MudTooltip>
+                    </MudItem>
+
+                    <MudItem xs="5" Class="mt-6">
+                        <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Applicant Instructions*</MudText>
+                    </MudItem>
+                    <MudItem xs="7" Class="mt-2">
+                    </MudItem>
+                    <MudItem xs="11">
+                                    <MudTextField @bind-Value="job.Instructions" Lines="5" Variant="Variant.Outlined" Required="true" For="@(()=>job.Instructions)" HelperText="Use this space for any specific instructions to the applicant. (Ex. 'Please send email and cover letter outlining why you are a good fit for this job.') etc."></MudTextField>
+                    </MudItem>
                                 <MudItem xs="1">
                                     <MudTooltip Placement="Placement.Top">
                                         <ChildContent>
@@ -329,164 +262,242 @@
                                         </ChildContent>
                                         <TooltipContent>
                                             <MudText Typo="Typo.caption">
-                                                You can give us any additional instructions here on how you want<br />your posting to be handled. This will not appear in the listing.
+                                                Use this space for any instructions to the applicant.<br />
+                                                Do not use this space for contact information. i.e. fax, email,<br />or mailing address. Put those in the CONTACT METHOD section.
                                             </MudText>
                                         </TooltipContent>
                                     </MudTooltip>
                                 </MudItem>
-                        </MudGrid>
-                        </MudItem>
-                     </MudGrid>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudItem xs="11" Class="d-flex justify-center">
-                                <MudButton ButtonType="ButtonType.Submit" Size="Size.Large" Style="background-color: #B7DF38; color: #0D3255;" Class="mb-4" Variant=" Variant.Filled">Preview</MudButton>
-                        </MudItem>
-                    </MudCardActions>
-                </MudCard>
-            </EditForm>
-        </MudItem>
-    </MudGrid>
-    }
-    else
-    {
-    <MudGrid Justify="Justify.Center">
-        <MudItem xs="10">
-            <MudCard Class="mt-8 mb-4">
-                <MudCardContent>
-                    <MudGrid Class="mb-2" Justify="Justify.Center">
-                    <MudItem xs="10" Class="mt-2">
-                    <MudGrid>
-                    <MudItem xs="12">
-                        <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" Class="mb-2 border-bottom pb-2" GutterBottom="true">Post a Job: Preview</MudText>
-                        </MudItem>
-                        <MudItem xs="12" Class="mt-2">
-                                    <MudText Typo="Typo.h5" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.JobTitle</MudText>
-                        </MudItem>
-                        <MudItem xs="2">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Employer Email :</b></MudText>
-                        </MudItem>
-                        <MudItem xs="10">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Email</MudText>
-                        </MudItem>
-                        <MudItem xs="2">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Company Name :</b></MudText>
-                        </MudItem>
-                        <MudItem xs="10">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.CompanyName</MudText>
-                        </MudItem>
-                        <MudItem xs="2">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Address :</b></MudText>
-                        </MudItem>
-                        <MudItem xs="10">
-                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.City, @job.State, @job.Country</MudText>
-                            </MudItem>
-                            <MudItem xs="2">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Job Type :</b></MudText>
-                        </MudItem>
-                                <MudItem xs="10">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.JobType</MudText>
-                                </MudItem>
-                                <MudItem xs="2">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Job/Intership :</b></MudText>
-                        </MudItem>
-                                <MudItem xs="10">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.EmploymentType</MudText>
-                                </MudItem>
-                                <MudItem xs="2">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Job Category :</b></MudText>
-                        </MudItem>
-                        <MudItem xs="10">
-                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Category</MudText>
-                            </MudItem>
-                            <MudItem xs="2">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Lastdate to Apply:</b></MudText>
-                        </MudItem>
-                            <MudItem xs="10">
-                                    @{
-                                        if (job.LastDateToApply.ToString().Length > 0)
-                                        {
-                                            var date = @job.LastDateToApply.ToString();
-                                            string[] strings = date.ToString().Split(' ');
-                                            ValidLastDateToApply = strings[0];
-                                        }
-                                    }
-                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@ValidLastDateToApply</MudText>
-                            </MudItem>
-                                @{
-                                    if(job.JobCode.Length > 0)
-                                    {<MudItem xs="2">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Job Code :</b></MudText>
-                        </MudItem>
-                                        <MudItem xs="10">
-                                            <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.JobCode</MudText>
-                                        </MudItem>
-                                    }
-                                }<MudItem xs="2">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Website :</b></MudText>
-                        </MudItem>
-                                <MudItem xs="10">
-                                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Website</MudText>
-                                </MudItem>
-                        <MudItem xs="12">
-                                <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Details</b></MudText>
-                            </MudItem>
-                        <MudItem xs="12">
-                        <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Details</MudText>
-                        </MudItem>
-                        <MudItem xs="12">
-                                    <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Instructions</b></MudText>
-                            </MudItem>
-                                    <MudItem xs="12">
-                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">@job.Instructions</MudText>
-                                    </MudItem>
-                            <MudItem xs="12">
-                                <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Salary</b></MudText>
-                            </MudItem>
-                            <MudItem xs="12">
-                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Salary</MudText>
-                            </MudItem>
-                            @{
-                                if(job.AdditionalComments.Length > 0)
-                                {
-                                    <MudItem xs="12">
-                                        <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Additional Information</b></MudText>
-                                    </MudItem>
-                                    <MudItem xs="12">
-                                        <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.AdditionalComments</MudText>
-                                    </MudItem>
-                                }
-                            }
-                            @{
-                                        if (job.InstructionForUs.Length > 0)
-                                {
-                                    <MudItem xs="12">
-                                        <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Private Instruction</b></MudText>
-                                    </MudItem>
-                                    <MudItem xs="12">
-                                                <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.InstructionForUs</MudText>
-                                    </MudItem>
-                                }
-                            }
-                    </MudGrid>
-                        </MudItem>
-                        </MudGrid>
-                 </MudCardContent>
-                <MudCardActions>
-                <MudGrid Justify="Justify.Center">
-                    <MudItem xs="10">
-                    <MudItem xs="12">
-                                    <MudChip OnClick="()=>Edit()" Size="Size.Large"><b>Go Back</b></MudChip>
-                                    <MudChip OnClick="()=>Submit()" Style="background-color: #B7DF38; color: #0D3255;" Size="Size.Large" Class="ml-4"><b>Submit</b></MudChip>
+
+                                <MudItem xs="4" Class="mt-6">
+                                <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Salary & Benefits*</MudText>
                     </MudItem>
+                            <MudItem xs="8" Class="mt-2">
                             </MudItem>
-                        </MudGrid>
+                            <MudItem xs="11">
+                                        <MudTextField @bind-Value="job.Salary" Lines="5" Variant="Variant.Outlined" Required="true" For="@(()=>job.Salary)"></MudTextField>
+                            </MudItem>
+                            <MudItem xs="1">
+                                <MudTooltip Placement="Placement.Top">
+                                    <ChildContent>
+                                        <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                                    </ChildContent>
+                                    <TooltipContent>
+                                        <MudText Typo="Typo.caption">
+                                            Please enter salary and benefit information for the position.
+                                        </MudText>
+                                    </TooltipContent>
+                                </MudTooltip>
+                            </MudItem>
+
+                            <MudItem xs="8" Class="mt-6">
+                                <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Additional Comments/ Your company info (optional)</MudText>
+                    </MudItem>
+                            <MudItem xs="4" Class="mt-2">
+                            </MudItem>
+                            <MudItem xs="11">
+                                    <MudTextField @bind-Value="job.AdditionalComments" Lines="5" Variant="Variant.Outlined" For="@(()=>job.AdditionalComments)"></MudTextField>
+                            </MudItem>
+                            
+                    <MudItem xs="1">
+                        <MudTooltip Placement="Placement.Top">
+                            <ChildContent>
+                                <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                            </ChildContent>
+                            <TooltipContent>
+                                <MudText Typo="Typo.caption">
+                                            Use this space to describe any additional information such as a<br/>pitch about your company, EOE, etc...
+                                </MudText>
+                            </TooltipContent>
+                        </MudTooltip>
+                    </MudItem>
+
+                    <MudItem xs="6" Class="mt-6">
+                                <MudText Typo="Typo.h5" Style="font-family: 'Inter'; color:#08243D;" GutterBottom="true">Private Instruction To Us (optional) </MudText>
+                    </MudItem>
+                    <MudItem xs="6" Class="mt-2">
+                    </MudItem>
+                    <MudItem xs="11">
+                               <MudTextField @bind-Value="job.InstructionForUs" Lines="5" Variant="Variant.Outlined" For="@(()=>job.InstructionForUs)"></MudTextField>
+                    </MudItem>
+                            <MudItem xs="1">
+                                <MudTooltip Placement="Placement.Top">
+                                    <ChildContent>
+                                        <MudIconButton Style="color:#08243D;" Icon="@Icons.Material.Outlined.Info" />
+                                    </ChildContent>
+                                    <TooltipContent>
+                                        <MudText Typo="Typo.caption">
+                                            You can give us any additional instructions here on how you want<br />your posting to be handled. This will not appear in the listing.
+                                        </MudText>
+                                    </TooltipContent>
+                                </MudTooltip>
+                            </MudItem>
+                    </MudGrid>
+                    </MudItem>
+                 </MudGrid>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudItem xs="11" Class="d-flex justify-center">
+                            <MudButton ButtonType="ButtonType.Submit" Size="Size.Large" Style="background-color: #B7DF38; color: #0D3255;" Class="mb-4" Variant=" Variant.Filled">Preview</MudButton>
+                    </MudItem>
                 </MudCardActions>
             </MudCard>
-        </MudItem>
-    </MudGrid>
-    }
-}
+        </EditForm>
+    </MudItem>
+</MudGrid>
+   
+<MudDialog @bind-IsVisible="IsPreview" Options="dialogOptions">
+    <TitleContent>
+        <MudText Typo="Typo.h4" Style="font-family: 'Inter';font-weight: 700; color:#08243D;" GutterBottom="true">Post a Job: Preview</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudContainer Style="max-height: 500px; overflow-y: scroll">
+            <MudGrid Spacing="1">
+                <MudItem xs="12" Class="mt-2">
+                    <MudText Typo="Typo.h5" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.JobTitle</MudText>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Employer Email</b></MudText>
+                </MudItem>
+                <MudItem xs="1" Class="text-center">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>:</b></MudText>
+                </MudItem>
+                <MudItem xs="9">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Email</MudText>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Company Name</b></MudText>
+                </MudItem>
+                <MudItem xs="1" Class="text-center">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>:</b></MudText>
+                </MudItem>
+                <MudItem xs="9">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.CompanyName</MudText>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Address</b></MudText>
+                </MudItem>
+                <MudItem xs="1" Class="text-center">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>:</b></MudText>
+                </MudItem>
+                <MudItem xs="9">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.City, @job.State, @job.Country</MudText>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Job Type</b></MudText>
+                </MudItem>
+                <MudItem xs="1" Class="text-center">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>:</b></MudText>
+                </MudItem>
+                <MudItem xs="9">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.JobType</MudText>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Job/Intership</b></MudText>
+                </MudItem>
+                <MudItem xs="1" Class="text-center">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>:</b></MudText>
+                </MudItem>
+                <MudItem xs="9">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.EmploymentType</MudText>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Job Category</b></MudText>
+                </MudItem>
+                <MudItem xs="1" Class="text-center">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>:</b></MudText>
+                </MudItem>
+                <MudItem xs="9">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Category</MudText>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Last Date to Apply</b></MudText>
+                </MudItem>
+                <MudItem xs="1" Class="text-center">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>:</b></MudText>
+                </MudItem>
+                <MudItem xs="9">
+                    @{
+                        if (job.LastDateToApply.ToString().Length > 0)
+                        {
+                            var date = @job.LastDateToApply.ToString();
+                            string[] strings = date.ToString().Split(' ');
+                            ValidLastDateToApply = strings[0];
+                        }
+                    }
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@ValidLastDateToApply</MudText>
+                </MudItem>
+                @{
+                    if (job.JobCode.Length > 0)
+                    {
+                        <MudItem xs="2">
+                            <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Job Code</b></MudText>
+                        </MudItem>
+                        <MudItem xs="1" Class="text-center">
+                            <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>:</b></MudText>
+                        </MudItem>
+                        <MudItem xs="9">
+                            <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.JobCode</MudText>
+                        </MudItem>
+                    }
+                }<MudItem xs="2">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Website</b></MudText>
+                </MudItem>
+                <MudItem xs="1" Class="text-center">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>:</b></MudText>
+                </MudItem>
+                <MudItem xs="9">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Website</MudText>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Details</b></MudText>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Details</MudText>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Instructions</b></MudText>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;">@job.Instructions</MudText>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Salary</b></MudText>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.Salary</MudText>
+                </MudItem>
+                @{
+                    if (job.AdditionalComments.Length>0)
+                    {
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Additional Information</b></MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.AdditionalComments</MudText>
+                        </MudItem>
+                    }
+                }
+                @{
+                    if (job.InstructionForUs.Length > 0)
+                    {
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.h6" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true"><b>Private Instruction</b></MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.body2" Style="font-family: 'Inter';color:#08243D;" GutterBottom="true">@job.InstructionForUs</MudText>
+                        </MudItem>
+                    }
+                }
+            </MudGrid>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudChip OnClick="()=>Edit()" Size="Size.Large" Class="mr-4"><b>Go Back</b></MudChip>
+        <MudChip OnClick="()=>Submit()" Style="background-color: #B7DF38; color: #0D3255;" Size="Size.Large" Class="mr-4"><b>Submit</b></MudChip>
+    </DialogActions>
+</MudDialog>
+
 @{
     if (job.Email.Length > 0 || job.JobType.Length > 0 || job.EmploymentType.Length > 0 || job.Category.Length > 0 || 
     job.CompanyName.Length > 0 || job.JobTitle.Length > 0 || job.JobCode.Length > 0 || job.LastDateToApply.HasValue == true ||
@@ -512,6 +523,7 @@
     public string ValidLastDateToApply = string.Empty;
     public int Words;
     public bool IsPreview = false;
+    private DialogOptions dialogOptions = new() { FullWidth = true, DisableBackdropClick = true, MaxWidth = MaxWidth.Medium };
 
     protected override async Task OnInitializedAsync()
     {
@@ -567,13 +579,11 @@
                 job.EmploymentType = InternshipType;
             }
         }
-        navigationManager.NavigateTo("postjob");
     }
 
     void Edit()
     {
         IsPreview = false;
-        navigationManager.NavigateTo("postjob");
     }
 
     async Task Submit()

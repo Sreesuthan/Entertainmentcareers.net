@@ -12,7 +12,7 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Style="background-color: #0E5FAC;">
+    <MudAppBar Class="ml-auto mr-auto" Style="background-color: #0E5FAC; max-width:1366px;">
         <MudSpacer />
         <MudMenu ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.BottomCenter" Dense="true">
             <ActivatorContent>
@@ -41,7 +41,7 @@
                         <MudMenuItem> How to Videos</MudMenuItem>
                         <MudMenuItem>Technical Support</MudMenuItem>
                     </MudItem>
-                    <MudItem xs="1" Style="border-right: 1px solid #1B3247; opacity:0.1; bor">
+                    <MudItem xs="1" Style="border-right: 1px solid #1B3247; opacity:0.1;">
                     </MudItem>
                     <MudItem xs="6">
                         <MudText Typo="Typo.subtitle2" Class="ml-4"><b>FOR EMPLOYERS</b></MudText>
@@ -81,7 +81,7 @@
         </AuthorizeView>
     </MudAppBar>
     <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="pt-3">
+        <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Style="max-width:1366px" Class="pt-3">
             <MudGrid Style="background-color:#136BBE;">
                 <MudItem xs="2" Class="text-center">
                     <a href="/"><MudImage Src="Images/Group 53.png" Fluid="true" /></a>
@@ -152,9 +152,9 @@
                 <MudItem xs="10">
                     <MudGrid Class="mt-8">
                         <MudItem xs="3" Class="text-center">
-                            <MudImage Src="Images/Group 17.png" Height="55" Width="145" Class="mt-1"/>
+                            <MudImage Src="Images/Group 17.png" Fluid="true" Class="mt-1" />
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem xs="2" Class="text-center">
                             <MudText Typo="Typo.h6" Style="color:#08243D;font-family: 'Oswald';">SUPPORT</MudText>
                             <ul class="list-unstyled mt-4">
                                 <li><a href="#" style="color:#0D3255;">Report A Problem</a></li>
@@ -163,7 +163,7 @@
                                 <li><a href="#" style="color:#0D3255;">Contact Us</a></li>
                             </ul>
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem xs="2" Class="text-center">
                             <MudText Typo="Typo.h6" Style="color:#08243D;font-family: 'Oswald';">EMPLOYERS</MudText>
                             <ul class="list-unstyled mt-4">
                                 <li><a href="/postjob" style="color:#0D3255;">Post A Job</a></li>
@@ -172,7 +172,7 @@
                                 <li><a href="#" style="color:#0D3255;">Who Uses Us</a></li>
                             </ul>
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem xs="2" Class="text-center">
                             <MudText Typo="Typo.h6" Style="color:#08243D;font-family: 'Oswald';">ADVETISING</MudText>
                             <ul class="list-unstyled mt-4">
                                 <li><a href="#" style="color:#0D3255;">Site Advertising</a></li>
@@ -187,7 +187,7 @@
                         </MudItem>
                     </MudGrid>
                     <MudGrid Justify="Justify.FlexEnd" Class="mt-4">
-                        <MudImage Src="Images/image 4.png" Height="70" Width="140" />
+                        <MudImage Src="Images/image 4.png" Fluid="true" />
                     </MudGrid>
                     <MudGrid Class="mt-6">
                         <MudItem xs="6">
